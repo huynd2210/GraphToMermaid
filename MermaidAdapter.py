@@ -1,113 +1,13 @@
 import pprint
-from abc import ABC, abstractmethod
 from typing import List
 
 from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
 
-"""
-This is an abstract class that defines the interface for converting a graph to a Mermaid string.`
-"""
-class GraphToMermaidAdapter(ABC):
+from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
+from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
+from utils import remove_string_between_delimiters, get_string_between_delimiters, \
+    extractStringInList_GivenListOfDelimiters
 
-    @abstractmethod
-    def get_node_label_by_id(self, identifier) -> str:
-        """
-        Returns the label of the node with the given identifier.
-        id[Label]
-        :param identifier:
-        :return label of the node:
-        """
-        pass
-
-    @abstractmethod
-    def get_node_neighbors_id_by_id(self, identifier) -> List[str]:
-        """
-        Returns the list of identifiers of the neighbors of the node with the given identifier.
-        :param identifier:
-        :return List of node identifiers:
-        """
-        pass
-
-    @abstractmethod
-    def getAllNodesId(self) -> List[str]:
-        """
-        Returns the list of identifiers of all nodes in the graph.
-        :return List of node identifiers:
-        """
-        pass
-
-class MermaidToGraphAdapter(ABC):
-
-    @abstractmethod
-    def add_node(self, name, data=None):
-        """
-        Add a node to the graph
-        :param name:
-        :param data:
-        :return:
-        """
-        pass
-
-
-    @abstractmethod
-    def add_edge(self, id1, id2):
-        """
-        Add an edge to the graph
-        :param id1:
-        :param id2:
-        :return:
-        """
-        pass
-
-
-
-
-def remove_string_between_delimiters(string, delimiters):
-    """
-    Removes the substring and delimiters from the string.
-
-    Args:
-    string (str): The input string.
-    delimiters (set of tuple): A set of tuples where each tuple contains a pair of delimiters.
-
-    Returns:
-    str: The string with the substring and delimiters removed.
-    """
-    for delim in delimiters:
-        start_delim, end_delim = delim
-        if start_delim in string and end_delim in string:
-            start_index = string.index(start_delim)
-            end_index = string.index(end_delim, start_index) + len(end_delim)
-            return string[:start_index] + string[end_index:]
-    return string
-
-def get_string_between_delimiters(text, start_delim, end_delim):
-    if start_delim not in text or end_delim not in text:
-        return None
-    start = text.split(start_delim, 1)[1]
-    return start.split(end_delim, 1)[0]
-
-def extractStringInList_GivenListOfDelimiters(inputList, delimiters) -> List[str]:
-    """
-    Extracts substrings between given delimiters from a list of strings.
-
-    Args:
-    input_list (list of str): The list of input strings.
-    delimiters (set of tuple): A set of tuples where each tuple contains a pair of delimiters.
-
-    Returns:
-    list of str: A list of substrings found between the delimiters.
-    """
-    results = []
-
-    for string in inputList:
-        for delimiter in delimiters:
-            firstDelimiter, secondDelimiter = delimiter
-            substring = get_string_between_delimiters(string, firstDelimiter, secondDelimiter)
-            if substring is not None:
-                results.append(substring)
-                break
-    return results
 
 def extractNodeDeclarationFromMermaid(mermaid_code_as_list: str, delimiters) -> List[str]:
     declarations = []
@@ -118,7 +18,22 @@ def extractNodeDeclarationFromMermaid(mermaid_code_as_list: str, delimiters) -> 
                 declarations.append(line)
     return declarations
 
-def extractNodesFromMermaid(mermaid_code_as_list: str) -> List[str]:
+
+#TODO: Handle complex mermaid links
+def extractLinksFromMermaid(mermaid_code_as_list):
+    links = []
+    mermaid_links_types = {
+        "-->",
+        "---",
+        "-.->",
+        "==>",
+        "~~~"
+    }
+    return links
+
+
+def extractNodesFromMermaid(mermaidCode: str):
+    mermaid_code_as_list = mermaidCode.split("\n")
     delimiters = {
         ("[", "]"),
         ("(", ")"),
@@ -127,7 +42,6 @@ def extractNodesFromMermaid(mermaid_code_as_list: str) -> List[str]:
         ('([', '])'),
         ('[[', ']]'),
         ('[(', ')]'),
-        ('((', '))'),
         ('>', ']'),
         ('[/', '/]'),
         ('[\\', '\\]'),
@@ -135,7 +49,6 @@ def extractNodesFromMermaid(mermaid_code_as_list: str) -> List[str]:
         ('[\\', '/]'),
         ('((', '))')
     }
-
 
     nodeLabels = extractStringInList_GivenListOfDelimiters(mermaid_code_as_list, delimiters)
     declarations = extractNodeDeclarationFromMermaid(mermaid_code_as_list, delimiters)
@@ -148,11 +61,14 @@ def extractNodesFromMermaid(mermaid_code_as_list: str) -> List[str]:
         result[id] = label
     return result
 
-def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter):
-    #Preprocess
+def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
+    # Preprocess
     mermaid_code = mermaid_code.split("\n")
-    mermaid_code = [line.strip() for line in mermaid_code]
-    mermaid_code = [line for line in mermaid_code if line != ""]
+    mermaid_code = [line.strip() for line in mermaid_code if line.strip()]
+
+    # Extract nodes
+    nodes = extractNodesFromMermaid(mermaid_code)
+
 
 def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", title="") -> str:
     # mermaid_code = [diagramType]
@@ -214,7 +130,19 @@ if __name__ == '__main__':
   3 --> 8
     """
 
-    mermaid_code_as_list = mermaid_code.split("\n")
 
-    nodes = extractNodesFromMermaid(mermaid_code_as_list)
+    nodes = extractNodesFromMermaid(mermaid_code)
     pprint.pp(nodes)
+    from default_data_structures.DefaultGraph import DefaultGraph
+
+    graph = DefaultGraph()
+    graph = mermaid_to_graph(mermaid_code, graph)
+    print(graph)
+
+    print("-_________")
+
+    inp = " A-- This is the text! ---B"
+    firstNode = inp.split("-->")[0].strip()
+    secondNode = inp.split("-->")[1].strip()
+    print("firstNode: " + firstNode)
+    print("secondNode: " + secondNode)

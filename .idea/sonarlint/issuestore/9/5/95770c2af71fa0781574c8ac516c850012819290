@@ -1,0 +1,14 @@
+
+ipython:S5890%"QReplace the type hint "str" with "Optional[str]" or don't assign "None" to "fill"(·İ›Ã
+ppython:S5890&"SReplace the type hint "str" with "Optional[str]" or don't assign "None" to "stroke"(øçÖ¸şÿÿÿÿ
+qpython:S5890'"YReplace the type hint "str" with "Optional[str]" or don't assign "None" to "stroke_width"(Û–·ò
+jpython:S5890("RReplace the type hint "str" with "Optional[str]" or don't assign "None" to "color"(„Í’È
+špython:S5890)"Replace the type hint "Union[str, list[int]]" with "Optional[Union[str, list[int]]]" or don't assign "None" to "stroke_dasharray"(´ËÚò
+tpython:S5890B"WReplace the type hint "str" with "Optional[str]" or don't assign "None" to "class_name"(ğØĞêıÿÿÿÿ
+ppython:S5890U"SReplace the type hint "str" with "Optional[str]" or don't assign "None" to "stroke"(øçÖ¸şÿÿÿÿ
+qpython:S5890V"YReplace the type hint "str" with "Optional[str]" or don't assign "None" to "stroke_width"(Û–·ò
+jpython:S5890W"RReplace the type hint "str" with "Optional[str]" or don't assign "None" to "color"(„Í’È
+npython:S5890g"QReplace the type hint "str" with "Optional[str]" or don't assign "None" to "text"(²ÈÄ‚şÿÿÿÿ
+vpython:S5890i"^Replace the type hint "LinkStyle" with "Optional[LinkStyle]" or don't assign "None" to "style"(İ•»È
+jpython:S5890›"RReplace the type hint "str" with "Optional[str]" or don't assign "None" to "title"(Šâñ
+mpython:S5890ş"OReplace the type hint "str" with "Optional[str]" or don't assign "None" to "id"(Ğ‹ıËûÿÿÿÿ

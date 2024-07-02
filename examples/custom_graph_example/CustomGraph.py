@@ -1,26 +1,12 @@
+import MermaidAdapter
+from examples.custom_graph_example.CustomNode import CustomNode
 
-
-class DefaultNode:
-    def __init__(self, id, name, data=None):
-        self.id = id
-        self.name = name
-        self.data = data
-        self.neighbors = set()
-
-    def add_neighbor(self, neighbor):
-        self.neighbors.add(neighbor)
-        neighbor.neighbors.add(self)
-
-    def remove_neighbor(self, neighbor):
-        self.neighbors.discard(neighbor)
-        neighbor.neighbors.discard(self)
-
-
-    def __repr__(self):
-        return f"Node(id={self.id}, name='{self.name}', data={self.data})"
-
-
-class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter):
+"""
+Example of a custom graph class.
+Simple inherits from the GraphToMermaidAdapter for conversion from graph to mermaid
+and MermaidToGraphAdapter for conversion from mermaid to graph.
+"""
+class CustomGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidToGraphAdapter):
     def __init__(self):
         self.nodes = {}
         self.next_id = 1
@@ -29,7 +15,7 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter):
         node_id = self.next_id
         self.next_id += 1
         if node_id not in self.nodes:
-            self.nodes[node_id] = DefaultNode(node_id, name, data)
+            self.nodes[node_id] = CustomNode(node_id, name, data)
         return self.nodes[node_id]
 
     def remove_node(self, node_id):
