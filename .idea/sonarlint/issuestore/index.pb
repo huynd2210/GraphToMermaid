@@ -1,9 +1,23 @@
 
 c
 3venv/Lib/site-packages/mermaid_builder/flowchart.py,9\5\95770c2af71fa0781574c8ac516c850012819290
-?
-DefaultGraph.py,1\d\1de03e4256a39f955b4e39cc067f8b2d309ee23f
 7
 main.py,f\1\f1bdda93d9a278e358509d498e17d97764c1fb29
 A
 MermaidAdapter.py,2\a\2a0e1cf4594efd243d75f2b7e20190957e271428
+V
+&default_data_structures/DefaultNode.py,e\7\e7b00497834b142ecf35f94d10ab0edd98d138de
+[
++examples/custom_graph_example/CustomNode.py,a\3\a30ba809a2851d9e9b09c62e37579bf878422e3f
+e
+5examples/custom_graph_example/CustomGraphToMermaid.py,f\5\f56304e502b0fa2ea5a08dae983befcf4b70020e
+8
+utils.py,5\0\5031d0ea937a7fcbe0a14f778442700216efff7a
+\
+,examples/custom_graph_example/CustomGraph.py,2\4\24f421caef0d86416989b892e534194314983aea
+W
+'default_data_structures/DefaultGraph.py,2\a\2a8d42c7bfa854d4027087251142338f76eae6a6
+P
+ adapter/GraphToMermaidAdapter.py,c\6\c6aa022047324277ddbfc487ebc92bce2f5ec754
+P
+ adapter/MermaidToGraphAdapter.py,e\3\e3d9d18740aa7e41c4569efd15e1ffe261c9bb0b

@@ -5,14 +5,11 @@ from default_data_structures.DefaultNode import DefaultNode
 class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidToGraphAdapter):
     def __init__(self):
         self.nodes = {}
-        self.next_id = 1
 
-    def add_node(self, name, data=None):
-        node_id = self.next_id
-        self.next_id += 1
-        if node_id not in self.nodes:
-            self.nodes[node_id] = DefaultNode(node_id, name, data)
-        return self.nodes[node_id]
+    def add_node(self, id, name=None, data=None):
+        if id not in self.nodes:
+            self.nodes[id] = DefaultNode(id, name, data)
+        return self.nodes[id]
 
     def remove_node(self, node_id):
         if node_id in self.nodes:

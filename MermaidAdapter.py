@@ -1,5 +1,5 @@
 import pprint
-from typing import List
+from typing import List, Set
 
 from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
 
@@ -9,7 +9,7 @@ from utils import remove_string_between_delimiters, get_string_between_delimiter
     extractStringInList_GivenListOfDelimiters
 
 
-def extractNodeDeclarationFromMermaid(mermaid_code_as_list: str, delimiters) -> List[str]:
+def extractNodeDeclarationFromMermaid(mermaid_code_as_list: List[str], delimiters) -> List[str]:
     declarations = []
     for line in mermaid_code_as_list:
         for delimiter in delimiters:
@@ -18,10 +18,18 @@ def extractNodeDeclarationFromMermaid(mermaid_code_as_list: str, delimiters) -> 
                 declarations.append(line)
     return declarations
 
+def isLineContainsLink(line: str, mermaid_links_types: Set[str]):
+    for link_type in mermaid_links_types:
+        if link_type in line:
+            return link_type
+    return False
+
+
 
 #TODO: Handle complex mermaid links
-def extractLinksFromMermaid(mermaid_code_as_list):
-    links = []
+def extractEdgesFromMermaid(mermaidCode: str):
+    mermaid_code_as_list = mermaidCode.split("\n")
+    edges = []
     mermaid_links_types = {
         "-->",
         "---",
@@ -29,11 +37,20 @@ def extractLinksFromMermaid(mermaid_code_as_list):
         "==>",
         "~~~"
     }
-    return links
+
+    for line in mermaid_code_as_list:
+        #If there is a link in the line, extract the edge (node connection)
+        linkType = isLineContainsLink(line, mermaid_links_types)
+        if linkType:
+            edge = (line.split(linkType)[0].strip(), line.split(linkType)[1].strip())
+            edges.append(edge)
+    return edges
 
 
 def extractNodesFromMermaid(mermaidCode: str):
     mermaid_code_as_list = mermaidCode.split("\n")
+    mermaid_code_as_list = [line.strip() for line in mermaid_code_as_list if line.strip()]
+
     delimiters = {
         ("[", "]"),
         ("(", ")"),
@@ -63,12 +80,19 @@ def extractNodesFromMermaid(mermaidCode: str):
 
 def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
     # Preprocess
-    mermaid_code = mermaid_code.split("\n")
-    mermaid_code = [line.strip() for line in mermaid_code if line.strip()]
-
     # Extract nodes
     nodes = extractNodesFromMermaid(mermaid_code)
+    edges = extractEdgesFromMermaid(mermaid_code)
 
+    for node in nodes.items():
+        nodeId, nodeLabel = node
+        graph.add_node(id=nodeId, name=nodeLabel)
+
+    for edge in edges:
+        origin, destination = edge
+        graph.add_edge(origin, destination)
+
+    return graph
 
 def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", title="") -> str:
     # mermaid_code = [diagramType]
@@ -130,19 +154,20 @@ if __name__ == '__main__':
   3 --> 8
     """
 
-
     nodes = extractNodesFromMermaid(mermaid_code)
     pprint.pp(nodes)
+
+    print("-_________")
+
     from default_data_structures.DefaultGraph import DefaultGraph
 
     graph = DefaultGraph()
     graph = mermaid_to_graph(mermaid_code, graph)
     print(graph)
 
-    print("-_________")
 
-    inp = " A-- This is the text! ---B"
-    firstNode = inp.split("-->")[0].strip()
-    secondNode = inp.split("-->")[1].strip()
-    print("firstNode: " + firstNode)
-    print("secondNode: " + secondNode)
+    # inp = " A-- This is the text! ---B"
+    # firstNode = inp.split("-->")[0].strip()
+    # secondNode = inp.split("-->")[1].strip()
+    # print("firstNode: " + firstNode)
+    # print("secondNode: " + secondNode)

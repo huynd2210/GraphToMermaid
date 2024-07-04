@@ -1,8 +1,7 @@
 
-Spython:S1135{"4Complete the task associated to this "TODO" comment.(ÚˆŒÝ8ûÄ²©…2
-`python:S1172|"<Remove the unused function parameter "mermaid_code_as_list".(ˆÑ¾éýÿÿÿÿ8¡å§©…2
-Vpython:S1481~"7Remove the unused local variable "mermaid_links_types".(¶Ëª†8£Ù«©…2
-Rpython:S1172¤"-Remove the unused function parameter "graph".(¾Ó¿øÿÿÿÿ8üÙ¦©…2
-Ipython:S1481ª")Remove the unused local variable "nodes".(ñÇ¡þ8üÙ¦©…2
-qpython:S5655ª"QChange this argument; Function "extractNodesFromMermaid" expects a different type(ñÇ¡þ8ýÙ¦©…2
-Cpython:S125®"Remove this commented out code.(žòê±úÿÿÿÿ8ýÙ¦©…2
+Spython:S1135"4Complete the task associated to this "TODO" comment.(ÚˆŒÝ8½²Â¢‡2
+python:S5655G"[Change this argument; Function "extractNodeDeclarationFromMermaid" expects a different type(°†‰•þÿÿÿÿ8ŽÉ¢‡2
+Qpython:S1172Q"-Remove the unused function parameter "graph".(¾Ó¿øÿÿÿÿ8¾²Â¢‡2
+Hpython:S1481U")Remove the unused local variable "nodes".(ñÇ¡þ8¾²Â¢‡2
+Hpython:S1481V")Remove the unused local variable "edges".(ø–ÜÕ8ìÑÅ¢‡2
+Bpython:S125Z"Remove this commented out code.(žòê±úÿÿÿÿ8¿²Â¢‡2
