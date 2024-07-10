@@ -1,23 +1,39 @@
 
 c
 3venv/Lib/site-packages/mermaid_builder/flowchart.py,9\5\95770c2af71fa0781574c8ac516c850012819290
-7
-main.py,f\1\f1bdda93d9a278e358509d498e17d97764c1fb29
-A
-MermaidAdapter.py,2\a\2a0e1cf4594efd243d75f2b7e20190957e271428
-V
-&default_data_structures/DefaultNode.py,e\7\e7b00497834b142ecf35f94d10ab0edd98d138de
-P
- adapter/GraphToMermaidAdapter.py,c\6\c6aa022047324277ddbfc487ebc92bce2f5ec754
-P
- adapter/MermaidToGraphAdapter.py,e\3\e3d9d18740aa7e41c4569efd15e1ffe261c9bb0b
-[
-+examples/custom_graph_example/CustomNode.py,a\3\a30ba809a2851d9e9b09c62e37579bf878422e3f
-e
-5examples/custom_graph_example/CustomGraphToMermaid.py,f\5\f56304e502b0fa2ea5a08dae983befcf4b70020e
+J
+src/main/MermaidAdapter.py,a\7\a7c5d4b712b04d92488a2aabac8422d93d86b423
+_
+/src/main/default_data_structures/DefaultNode.py,1\6\1643e95e812cdca7bd48ab18fdbf641af067d040
+Y
+)src/main/adapter/MermaidToGraphAdapter.py,a\c\ac9c5062113d23835167af7c83be205c091178b2
+Y
+)src/main/adapter/GraphToMermaidAdapter.py,3\d\3da67890a232dfd179419898f0d98c86f86463e4
+`
+0src/main/default_data_structures/DefaultGraph.py,a\5\a540da90afdcda1dfc8b055f8adbb6f7affadcee
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+@
+src/main/main.py,f\4\f4330d0098333cf4f90ba48489125f2fd22e6609
+@
+requirements.txt,1\9\19359a61ae2446b51b549167b014da2fcf265768
 8
-utils.py,5\0\5031d0ea937a7fcbe0a14f778442700216efff7a
-\
-,examples/custom_graph_example/CustomGraph.py,2\4\24f421caef0d86416989b892e534194314983aea
-W
-'default_data_structures/DefaultGraph.py,2\a\2a8d42c7bfa854d4027087251142338f76eae6a6
+setup.py,8\e\8e2edce0d507e1297474f25c00cae94258db38d8
+9
+	testst.py,0\f\0ff7f123440a2bbb91a4995e5af4306b6a19eca0
+b
+2src/main/examples/custom_graph_example/__init__.py,a\e\aed88febd0410584adb8b56712827917364e66e9
+A
+src/main/utils.py,9\f\9fbcfc99bd7bfa261dd88102d37ac00fce1b2503
+i
+9src/main/examples/quick_start/mermaid_to_graph_example.py,6\8\68b0c529ea63ad7834484adfe2ac1fee49f438cc
+j
+:build/lib/src/main/default_data_structures/DefaultGraph.py,9\c\9cfc87bb7ba904c808e6cf5c2cf126bcf14843b4
+P
+ examples/CustomGraphToMermaid.py,9\c\9cd40b351de96dea1c0551fb9d3cb0526513b909
+G
+examples/CustomGraph.py,4\0\40760c9a0f7f10a70d315a7985f427bdf0e0351b
+F
+examples/CustomNode.py,f\8\f8cc5548a341247b81c259057eb8aa11c3dd441e
+D
+src/main/__init__.py,c\9\c97f33e131cacf0a485807b8014d64a6f8f15958

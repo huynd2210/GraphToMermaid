@@ -91,6 +91,83 @@
             </llm>
           </llm>
         </chat>
+        <chat>
+          <accountId value="VXNlcjo0MDg1MTE=" />
+          <internalId value="5e5f2b07-6883-4bea-93b7-256e3d25b539" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
+        <chat>
+          <accountId value="VXNlcjo0MDg1MTE=" />
+          <internalId value="8d65923a-ae62-4272-a5a2-219339175c76" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
+        <chat>
+          <accountId value="VXNlcjo0MDg1MTE=" />
+          <internalId value="f84b08be-7898-4074-ab9a-f29289793fac" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
+        <chat>
+          <accountId value="VXNlcjo0MDg1MTE=" />
+          <internalId value="edc4c6d0-4760-4e00-8b97-b97aa149e711" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
+        <chat>
+          <accountId value="VXNlcjo0MDg1MTE=" />
+          <internalId value="eec0305e-a541-42a9-87a6-d28da8472081" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
+        <chat>
+          <accountId value="VXNlcjo0MDg1MTE=" />
+          <internalId value="e882cd21-58de-4386-8d94-64cb8403f654" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
+        <chat>
+          <accountId value="VXNlcjo0MDg1MTE=" />
+          <internalId value="69d4a539-2e2c-4a06-8fe7-894904f681ae" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
       </list>
     </chats>
     <defaultLlm>
