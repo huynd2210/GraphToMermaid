@@ -152,6 +152,8 @@ if __name__ == '__main__':
   3 --> 8
     """
 
+
+    print("Printing nodes from mermaid code")
     nodes = extractNodesFromMermaid(mermaid_code)
     pprint.pp(nodes)
 
@@ -161,7 +163,12 @@ if __name__ == '__main__':
 
     graph = DefaultGraph()
     graph = mermaid_to_graph(mermaid_code, graph)
+    print("Printing graph from mermaid code")
     print(graph)
+    print("-----")
+    print("Printing mermaid code from graph")
+    mermaid_code_from_graph = graph_to_mermaid(graph)
+    print(mermaid_code_from_graph)
 
 
     # inp = " A-- This is the text! ---B"
