@@ -5,7 +5,7 @@ Simple inherits from the GraphToMermaidAdapter for conversion from graph to merm
 and MermaidToGraphAdapter for conversion from mermaid to graph.
 """
 from examples.CustomNode import CustomNode
-from src.main import MermaidAdapter
+from adapter import MermaidAdapter
 
 
 class CustomGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidToGraphAdapter):

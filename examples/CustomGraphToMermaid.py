@@ -1,4 +1,4 @@
-from src.main import MermaidAdapter
+from adapter import MermaidAdapter
 from examples.CustomGraph import CustomGraph
 
 

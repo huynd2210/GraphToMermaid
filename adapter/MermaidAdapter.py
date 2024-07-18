@@ -5,8 +5,7 @@ from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
 
 from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
 from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
-from utils import remove_string_between_delimiters, get_string_between_delimiters, \
-    extractStringInList_GivenListOfDelimiters
+from utils import remove_string_between_delimiters, extractStringInList_GivenListOfDelimiters
 
 
 def extractNodeDeclarationFromMermaid(mermaid_code_as_list: List[str], delimiters) -> List[str]:
@@ -23,8 +22,6 @@ def isLineContainsLink(line: str, mermaid_links_types: Set[str]):
         if link_type in line:
             return link_type
     return False
-
-
 
 #TODO: Handle complex mermaid links
 def extractEdgesFromMermaid(mermaidCode: str):
@@ -154,16 +151,23 @@ if __name__ == '__main__':
   3 --> 8
     """
 
+
+    print("Printing nodes from mermaid code")
     nodes = extractNodesFromMermaid(mermaid_code)
     pprint.pp(nodes)
 
     print("-_________")
 
-    from default_data_structures.DefaultGraph import DefaultGraph
+    from adapter.DefaultGraph import DefaultGraph
 
     graph = DefaultGraph()
     graph = mermaid_to_graph(mermaid_code, graph)
+    print("Printing graph from mermaid code")
     print(graph)
+    print("-----")
+    print("Printing mermaid code from graph")
+    mermaid_code_from_graph = graph_to_mermaid(graph)
+    print(mermaid_code_from_graph)
 
 
     # inp = " A-- This is the text! ---B"
