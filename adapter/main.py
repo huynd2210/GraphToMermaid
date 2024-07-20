@@ -1,17 +1,31 @@
-from utils import get_string_between_delimiters
+from adapter.MermaidAdapter import mermaid_to_graph, extractNodesFromLinks, graph_to_mermaid
 
 # Example usage for a Computer Science topic graph
-#TODO: Turn this into CLI tool as well as pip-installable package
-if __name__ == "__main__":
+# TODO: Turn this into CLI tool as well as pip-installable package
+from adapter.DefaultGraph import DefaultGraph
 
-    print("------------")
-    # print("\nGraph from Mermaid Code:")
-    # testG = MermaidConverter.mermaid_to_graph(MermaidConverter.graph_to_mermaid(g))
-    # print(testG)
+mermaid_code = """
+  flowchart TB
+    A(Test)
+    E(Oof)
+    A --> C
+    A --> D
+    B --> C
+    B --> D
+    B --> E
+"""
+mermaid_links_types = {
+    "-->",
+    "---",
+    "-.->",
+    "==>",
+    "~~~"
+}
+print(extractNodesFromLinks(mermaid_code, mermaid_links_types))
 
-
-    text = "Hello [world]!"
-    start_delim = "["
-    end_delim = "]"
-    result = get_string_between_delimiters(text, start_delim, end_delim)
-    print(result)  # Output: world
+graph = DefaultGraph()
+graph = mermaid_to_graph(mermaid_code, graph)
+print(graph)
+print("------")
+mermaid_code_from_graph = graph_to_mermaid(graph)
+print(mermaid_code_from_graph)

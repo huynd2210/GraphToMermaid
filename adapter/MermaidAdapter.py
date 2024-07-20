@@ -5,16 +5,16 @@ from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
 
 from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
 from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
-from utils import remove_string_between_delimiters, extractStringInList_GivenListOfDelimiters
+from utils import remove_string_between_delimiters, extractStringInList_GivenListOfDelimiters, merge, Predicate
 
 
-def extractNodeDeclarationFromMermaid(mermaid_code_as_list: List[str], delimiters) -> List[str]:
-    declarations = []
+def extractNodeDeclarationFromMermaid(mermaid_code_as_list: List[str], delimiters) -> Set[str]:
+    declarations = set()
     for line in mermaid_code_as_list:
         for delimiter in delimiters:
             firstDelimiter, secondDelimiter = delimiter
             if firstDelimiter in line and secondDelimiter in line:
-                declarations.append(line)
+                declarations.add(line)
     return declarations
 
 def isLineContainsLink(line: str, mermaid_links_types: Set[str]):
@@ -24,17 +24,9 @@ def isLineContainsLink(line: str, mermaid_links_types: Set[str]):
     return False
 
 #TODO: Handle complex mermaid links
-def extractEdgesFromMermaid(mermaidCode: str):
+def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
     mermaid_code_as_list = mermaidCode.split("\n")
     edges = []
-    mermaid_links_types = {
-        "-->",
-        "---",
-        "-.->",
-        "==>",
-        "~~~"
-    }
-
     for line in mermaid_code_as_list:
         #If there is a link in the line, extract the edge (node connection)
         linkType = isLineContainsLink(line, mermaid_links_types)
@@ -43,8 +35,20 @@ def extractEdgesFromMermaid(mermaidCode: str):
             edges.append(edge)
     return edges
 
+def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: Set[str]):
+    mermaid_code_as_list = mermaidCode.split("\n")
+    nodes = set()
 
-def extractNodesFromMermaid(mermaidCode: str):
+    for line in mermaid_code_as_list:
+        linkType = isLineContainsLink(line, mermaid_links_types)
+        if linkType:
+            nodes.add(line.split(linkType)[0].strip())
+            nodes.add(line.split(linkType)[1].strip())
+
+    return nodes
+
+
+def extractNodesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
     mermaid_code_as_list = mermaidCode.split("\n")
     mermaid_code_as_list = [line.strip() for line in mermaid_code_as_list if line.strip()]
 
@@ -65,21 +69,38 @@ def extractNodesFromMermaid(mermaidCode: str):
     }
 
     nodeLabels = extractStringInList_GivenListOfDelimiters(mermaid_code_as_list, delimiters)
-    declarations = extractNodeDeclarationFromMermaid(mermaid_code_as_list, delimiters)
+    nodeDeclarations = extractNodeDeclarationFromMermaid(mermaid_code_as_list, delimiters)
+    nodes = merge(nodeDeclarations,
+                  extractNodesFromLinks(mermaidCode, mermaid_links_types),
+                  predicate=Predicate(lambda firstCollection, item: not any(item in element for element in firstCollection), nodeDeclarations)
+                  )
     nodeIds = []
     result = {}
-    for line in declarations:
+    for line in nodes:
         nodeId = remove_string_between_delimiters(line, delimiters)
         nodeIds.append(nodeId)
-    for id, label in zip(nodeIds, nodeLabels):
-        result[id] = label
+
+
+    for i in range(len(nodeIds)):
+        if i < len(nodeLabels):
+            result[nodeIds[i]] = nodeLabels[i]
+        else:
+            result[nodeIds[i]] = nodeIds[i]
     return result
 
 def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
     # Preprocess
     # Extract nodes
-    nodes = extractNodesFromMermaid(mermaid_code)
-    edges = extractEdgesFromMermaid(mermaid_code)
+    mermaid_links_types = {
+        "-->",
+        "---",
+        "-.->",
+        "==>",
+        "~~~"
+    }
+
+    nodes = extractNodesFromMermaid(mermaid_code, mermaid_links_types)
+    edges = extractEdgesFromMermaid(mermaid_code, mermaid_links_types)
 
     for node in nodes.items():
         nodeId, nodeLabel = node
@@ -151,10 +172,6 @@ if __name__ == '__main__':
   3 --> 8
     """
 
-
-    print("Printing nodes from mermaid code")
-    nodes = extractNodesFromMermaid(mermaid_code)
-    pprint.pp(nodes)
 
     print("-_________")
 

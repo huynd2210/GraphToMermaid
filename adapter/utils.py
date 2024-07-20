@@ -7,6 +7,7 @@ def get_string_between_delimiters(text, start_delim, end_delim):
     start = text.split(start_delim, 1)[1]
     return start.split(end_delim, 1)[0]
 
+
 def remove_string_between_delimiters(string, delimiters):
     """
     Removes the substring and delimiters from the string.
@@ -25,6 +26,7 @@ def remove_string_between_delimiters(string, delimiters):
             end_index = string.index(end_delim, start_index) + len(end_delim)
             return string[:start_index] + string[end_index:]
     return string
+
 
 def extractStringInList_GivenListOfDelimiters(inputList, delimiters) -> List[str]:
     """
@@ -47,3 +49,29 @@ def extractStringInList_GivenListOfDelimiters(inputList, delimiters) -> List[str
                 results.append(substring)
                 break
     return results
+
+
+class Predicate:
+    def __init__(self, predicate, *predicateArgs):
+        self.predicate = predicate
+        self.predicateArgs = predicateArgs
+
+    def __call__(self, *args):
+        return self.predicate(*self.predicateArgs, *args)
+
+
+def merge(collectionFirst, collectionSecond, predicate: Predicate = None):
+    """
+    Merge the second collection into the first collection based on some provided predicate.
+    Note that the order of the collection is important as elements from the second collection will be checked against the predicate then added to the first.
+    :param collectionFirst:
+    :param collectionSecond:
+    :param predicate:
+    :return:
+    """
+    if predicate is None:
+        predicate = Predicate(lambda x: True)
+    for item in collectionSecond:
+        if predicate(item):
+            collectionFirst.add(item)
+    return collectionFirst

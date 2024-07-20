@@ -8,8 +8,10 @@ pip install graph-to-mermaid
 ```
 
 ### Quick Start
+Converting mermaid code to pre-defined graph:
 ```python
-from default_data_structures.DefaultGraph import DefaultGraph
+from adapter.MermaidAdapter import mermaid_to_graph
+from adapter.DefaultGraph import DefaultGraph
 
 mermaid_code = """
   flowchart TB
@@ -22,6 +24,23 @@ mermaid_code = """
 graph = DefaultGraph()
 graph = mermaid_to_graph(mermaid_code, graph)
 print(graph)
+```
 
+Converting from graph to mermaid code:
+```python
+from adapter.MermaidAdapter import graph_to_mermaid
+from adapter.DefaultGraph import DefaultGraph
 
+graph = DefaultGraph()
+
+graph.add_node("1", "Computer Science")
+graph.add_node("2", "Programming")
+graph.add_node("3", "Algorithms")
+
+graph.add_edge("1", "2")
+graph.add_edge("1", "3")
+graph.add_edge("2", "3")
+
+mermaid_code_from_graph = graph_to_mermaid(graph)
+print(mermaid_code_from_graph)
 ```

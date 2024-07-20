@@ -1,63 +1,35 @@
 from adapter import MermaidAdapter
-from adapter.DefaultNode import DefaultNode
 
+import networkx as nx
 
 class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidToGraphAdapter):
     def __init__(self):
-        self.nodes = {}
+        self.graph = nx.DiGraph()
 
     def add_node(self, id, name=None, data=None):
-        if id not in self.nodes:
-            self.nodes[id] = DefaultNode(id, name, data)
-        return self.nodes[id]
+        self.graph.add_node(id, name=name, data=data)
 
     def remove_node(self, node_id):
-        if node_id in self.nodes:
-            node = self.nodes[node_id]
-            for neighbor in list(node.neighbors):
-                node.remove_neighbor(neighbor)
-            del self.nodes[node_id]
+        self.graph.remove_node(node_id)
 
     def add_edge(self, id1, id2):
-        if id1 in self.nodes and id2 in self.nodes:
-            node1 = self.nodes[id1]
-            node2 = self.nodes[id2]
-            node1.add_neighbor(node2)
+        self.graph.add_edge(id1, id2)
 
     def remove_edge(self, id1, id2):
-        if id1 in self.nodes and id2 in self.nodes:
-            node1 = self.nodes[id1]
-            node2 = self.nodes[id2]
-            node1.remove_neighbor(node2)
-
-    def get_nodes(self):
-        return list(self.nodes.values())
-
+        self.graph.remove_edge(id1, id2)
     def get_edges(self):
-        edges = set()
-        for node in self.nodes.values():
-            for neighbor in node.neighbors:
-                edge = tuple(sorted([node.id, neighbor.id]))
-                edges.add(edge)
-        return list(edges)
-
-    def get_node_by_name(self, name):
-        for node in self.nodes.values():
-            if node.name == name:
-                return node
-        return None
-
+        return list(self.graph.edges())
     def get_node_label_by_id(self, identifier):
-        return self.nodes[identifier].name
+        return self.graph.nodes[identifier]["name"]
 
     def get_node_neighbors_id_by_id(self, identifier):
-        return [neighbor.id for neighbor in self.nodes[identifier].neighbors]
+        return self.graph.neighbors(identifier)
     def getAllNodesId(self):
-        return list(self.nodes.keys())
+        return list(self.graph.nodes())
 
     def __str__(self):
         result = "Graph:\n"
-        for node in self.nodes.values():
-            neighbors = ", ".join(str(neighbor.id) for neighbor in node.neighbors)
-            result += f"Node {node.id} ('{node.name}'): {neighbors}\n"
+        for node in self.graph.nodes():
+            neighbors = list(self.graph.neighbors(node))
+            result += f"{node} {self.graph.nodes[node]['name']} -> {neighbors}\n"
         return result
