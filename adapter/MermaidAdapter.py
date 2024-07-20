@@ -8,20 +8,8 @@ from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
 from utils import remove_string_between_delimiters, extractStringInList_GivenListOfDelimiters, merge, Predicate
 
 
-def extractNodeDeclarationFromMermaid(mermaid_code_as_list: List[str], delimiters) -> Set[str]:
-    declarations = set()
-    for line in mermaid_code_as_list:
-        for delimiter in delimiters:
-            firstDelimiter, secondDelimiter = delimiter
-            if firstDelimiter in line and secondDelimiter in line:
-                declarations.add(line)
-    return declarations
 
-def isLineContainsLink(line: str, mermaid_links_types: Set[str]):
-    for link_type in mermaid_links_types:
-        if link_type in line:
-            return link_type
-    return False
+
 
 #TODO: Handle complex mermaid links
 def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
@@ -35,17 +23,7 @@ def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
             edges.append(edge)
     return edges
 
-def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: Set[str]):
-    mermaid_code_as_list = mermaidCode.split("\n")
-    nodes = set()
 
-    for line in mermaid_code_as_list:
-        linkType = isLineContainsLink(line, mermaid_links_types)
-        if linkType:
-            nodes.add(line.split(linkType)[0].strip())
-            nodes.add(line.split(linkType)[1].strip())
-
-    return nodes
 
 
 def extractNodesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
