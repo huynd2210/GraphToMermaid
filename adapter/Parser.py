@@ -58,3 +58,15 @@ def isLineContainsLink(line: str, mermaid_links_types: Set[str]):
         if link_type in line:
             return link_type
     return False
+
+#TODO: Handle complex mermaid links
+def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
+    mermaid_code_as_list = mermaidCode.split("\n")
+    edges = []
+    for line in mermaid_code_as_list:
+        #If there is a link in the line, extract the edge (node connection)
+        linkType = isLineContainsLink(line, mermaid_links_types)
+        if linkType:
+            edge = (line.split(linkType)[0].strip(), line.split(linkType)[1].strip())
+            edges.append(edge)
+    return edges

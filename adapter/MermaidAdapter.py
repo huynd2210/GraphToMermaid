@@ -5,30 +5,19 @@ from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
 
 from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
 from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
-from utils import remove_string_between_delimiters, extractStringInList_GivenListOfDelimiters, merge, Predicate
+from adapter.Parser import extractNodes, isLineContainsLink, extractEdgesFromMermaid
 
 
-
-
-
-#TODO: Handle complex mermaid links
-def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
-    mermaid_code_as_list = mermaidCode.split("\n")
-    edges = []
-    for line in mermaid_code_as_list:
-        #If there is a link in the line, extract the edge (node connection)
-        linkType = isLineContainsLink(line, mermaid_links_types)
-        if linkType:
-            edge = (line.split(linkType)[0].strip(), line.split(linkType)[1].strip())
-            edges.append(edge)
-    return edges
-
-
-
-
-def extractNodesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
-    mermaid_code_as_list = mermaidCode.split("\n")
-    mermaid_code_as_list = [line.strip() for line in mermaid_code_as_list if line.strip()]
+def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
+    # Preprocess
+    # Extract nodes
+    mermaid_links_types = {
+        "-->",
+        "---",
+        "-.->",
+        "==>",
+        "~~~"
+    }
 
     delimiters = {
         ("[", "]"),
@@ -46,38 +35,7 @@ def extractNodesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
         ('((', '))')
     }
 
-    nodeLabels = extractStringInList_GivenListOfDelimiters(mermaid_code_as_list, delimiters)
-    nodeDeclarations = extractNodeDeclarationFromMermaid(mermaid_code_as_list, delimiters)
-    nodes = merge(nodeDeclarations,
-                  extractNodesFromLinks(mermaidCode, mermaid_links_types),
-                  predicate=Predicate(lambda firstCollection, item: not any(item in element for element in firstCollection), nodeDeclarations)
-                  )
-    nodeIds = []
-    result = {}
-    for line in nodes:
-        nodeId = remove_string_between_delimiters(line, delimiters)
-        nodeIds.append(nodeId)
-
-
-    for i in range(len(nodeIds)):
-        if i < len(nodeLabels):
-            result[nodeIds[i]] = nodeLabels[i]
-        else:
-            result[nodeIds[i]] = nodeIds[i]
-    return result
-
-def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
-    # Preprocess
-    # Extract nodes
-    mermaid_links_types = {
-        "-->",
-        "---",
-        "-.->",
-        "==>",
-        "~~~"
-    }
-
-    nodes = extractNodesFromMermaid(mermaid_code, mermaid_links_types)
+    nodes = extractNodes(mermaid_code, delimiters, mermaid_links_types)
     edges = extractEdgesFromMermaid(mermaid_code, mermaid_links_types)
 
     for node in nodes.items():
@@ -90,9 +48,8 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
 
     return graph
 
-def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", title="") -> str:
-    # mermaid_code = [diagramType]
 
+def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", title=""):
     ChartDirection = {
         "LR": ChartDir.LR,
         "TD": ChartDir.TD,
@@ -103,30 +60,14 @@ def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", titl
 
     mermaidChart = Chart(title=title, direction=ChartDirection[diagramType])
 
-    visited = set()
+    for node in graph.getAllNodesId():
+        mermaidNodeLabel = graph.get_node_label_by_id(node)
+        mermaidChart.add_node(Node(title=mermaidNodeLabel, id=node))
 
-    def dfs(nodeId):
-        if nodeId in visited:
-            return
-
-        visited.add(nodeId)
-
-        mermaidNodeLabel = graph.get_node_label_by_id(nodeId)
-
-        mermaidChart.add_node(Node(title=mermaidNodeLabel, id=nodeId))
-
-        for neighborId in graph.get_node_neighbors_id_by_id(nodeId):
-            if neighborId not in visited:
-                mermaidChart.add_link(Link(src=nodeId, dest=neighborId))
-                dfs(neighborId)
-
-    # Start DFS from each unvisited node to ensure all nodes are included
-    for nodeId in graph.getAllNodesId():
-        if nodeId not in visited:
-            dfs(nodeId)
+        for neighbor in graph.get_node_neighbors_id_by_id(node):
+            mermaidChart.add_link(Link(src=node, dest=neighbor))
 
     return mermaidChart
-
 
 if __name__ == '__main__':
     mermaid_code = """
@@ -142,10 +83,10 @@ if __name__ == '__main__':
   8(Arrays)
   1 --> 4
   1 --> 2
-  2 --> 7
-  2 --> 6
   1 --> 5
   1 --> 3
+  2 --> 7
+  2 --> 6
   3 --> 9
   3 --> 8
     """
