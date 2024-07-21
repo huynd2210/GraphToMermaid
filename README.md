@@ -4,7 +4,7 @@ GraphToMermaid is a python library that turn any graph data structure into merma
 Install with pip:
 
 ```
-pip install graph-to-mermaid
+pip install GraphToMermaid
 ```
 
 ### Quick Start
