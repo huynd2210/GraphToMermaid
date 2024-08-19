@@ -17,13 +17,16 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
 
     def remove_edge(self, id1, id2):
         self.graph.remove_edge(id1, id2)
+
     def get_edges(self):
         return list(self.graph.edges())
+
     def get_node_label_by_id(self, identifier):
         return self.graph.nodes[identifier]["name"]
 
     def get_node_neighbors_id_by_id(self, identifier):
         return self.graph.neighbors(identifier)
+
     def getAllNodesId(self):
         return list(self.graph.nodes())
 

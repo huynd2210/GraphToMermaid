@@ -71,24 +71,24 @@ def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", titl
 
 if __name__ == '__main__':
     mermaid_code = """
-    flowchart TD
-  1(Computer Science)
-  4(Programming)
-  2(Algorithms)
-  7(Searching Algorithms)
-  6(Sorting Algorithms)
-  5(Databases)
-  3(Data Structures)
-  9(Linked Lists)
-  8(Arrays)
-  1 --> 4
-  1 --> 2
-  1 --> 5
-  1 --> 3
-  2 --> 7
-  2 --> 6
-  3 --> 9
-  3 --> 8
+        flowchart TD
+            1(Computer Science)
+            4(Programming)
+            2(Algorithms)
+            7(Searching Algorithms)
+            6(Sorting Algorithms)
+            5(Databases)
+            3(Data Structures)
+            9(Linked Lists)
+            8(Arrays)
+            1 --> 4
+            1 --> 2
+            1 --> 5
+            1 --> 3
+            2 --> 7
+            2 --> 6
+            3 --> 9
+            3 --> 8
     """
 
 
