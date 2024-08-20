@@ -6,7 +6,7 @@ from adapter.MermaidAdapter import mermaid_to_graph, graph_to_mermaid
 mermaid_code = """
   flowchart TB
     A[alibaba]
-    A --> C & F --> E
+    A --> C & G--> E & F
     A --> D 
     B --> C
     B --> D
