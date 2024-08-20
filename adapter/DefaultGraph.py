@@ -34,5 +34,5 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
         result = "Graph:\n"
         for node in self.graph.nodes():
             neighbors = list(self.graph.neighbors(node))
-            result += f"{node} {self.graph.nodes[node]['name']} -> {neighbors}\n"
+            result += f"{node} {self.get_node_label_by_id(node)} -> {str(neighbors)[1:-1]}\n"
         return result
