@@ -8,12 +8,13 @@ from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
 from adapter.Parser import extractNodes, extractEdgesFromMermaid
 
 
+
 def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
     # Preprocess
     # Extract nodes
     #
     # links in regex
-    mermaid_links_types = {
+    mermaid_links_types = [
         r'-->(?:\|(.+?)\|)',
         r'-.->(?:\|(.+?)\|)',
         r'==>(?:\|(.+?)\|)',
@@ -29,7 +30,7 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
         r'---',
         r'~~~',
         r'==='
-    }
+    ]
 
     delimiters = {
         ("[", "]"),
@@ -77,7 +78,8 @@ def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", titl
         mermaidChart.add_node(Node(title=mermaidNodeLabel, id=node))
 
         for neighbor in graph.get_node_neighbors_id_by_id(node):
-            mermaidChart.add_link(Link(src=node, dest=neighbor))
+            description = graph.get_edges_description(node, neighbor)
+            mermaidChart.add_link(Link(src=node, dest=neighbor, text = description))
 
     return mermaidChart
 

@@ -27,7 +27,7 @@ def extractNodes(mermaidCode:str, delimiters: Set[str], mermaid_links_types: Set
     nodeIdsFromLinks = extractNodesFromLinks(mermaidCode, mermaid_links_types)
 
     for line in mermaid_code_as_list:
-        if not extractEdgeDetailFromLine(line, mermaid_links_types):
+        if not extractEdgeDetailFromLine(line, mermaid_links_types)[0]:
             nodeLabel = extractNodeLabel(line, delimiters)
             nodeId = line[0]
             nodeIds_labels[nodeId] = nodeLabel
@@ -78,44 +78,28 @@ def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
     for line in mermaid_code_as_list:
         #If there is a link in the line, extract the edge (node connection)
         last_site = []
-        while (match := extractEdgeDetailFromLine(line, mermaid_links_types))[0]:
+        last_description = ""
+        while (match := extractEdgeDetailFromLine(line, mermaid_links_types))[0]: 
             link_type = match[0]
-            description = match[1]
             left_nodes = getNodeFromSite(line.split(link_type, 1)[0].strip())
             if last_site:
-                edges.extend(normalizedEdge(last_site, left_nodes, description))
-            
+                edges.extend(normalizedEdge(last_site, left_nodes, last_description))
+
+            last_description = match[1]
             line = line.split(link_type, 1)[1]
             last_site = left_nodes
             
             if not extractEdgeDetailFromLine(line, mermaid_links_types)[0]:
-                edges.extend(normalizedEdge(left_nodes, getNodeFromSite(line), description))
+                edges.extend(normalizedEdge(left_nodes, getNodeFromSite(line), last_description))
     return edges
 
 def extractEdgeDetailFromLine(line, mermaid_links_types):
-    patterns = [
-        r'-->(?:\|(.+?)\|)',
-        r'-.->(?:\|(.+?)\|)',
-        r'==>(?:\|(.+?)\|)',
-        r'---(?:\|(.+?)\|)',
-        r'~~~(?:\|(.+?)\|)', 
-        r'--\s*(.+?)\s*-->',
-        r'-.\s*(.+?)\s*.->',
-        r'==\s*(.+?)s*==>',
-        r'--\s*(.+?)\s*---',
-        r'~~\s*(.+?)\s*~~~',
-        r'-->',
-        r'-.->',
-        r'---',
-        r'~~~',
-        r'==='     
-    ]
+    last_match, description, start_index = None, "", INT_MAX
 
-    last_match, description, start_index = None, None, INT_MAX
-
-    for pattern in patterns:
+    for pattern in mermaid_links_types:
         if match := re.search(pattern, line):
-            if match.start() >= start_index: break
+            if match.start() >= start_index: 
+                continue
             last_match = match.group(0)
             if len(match.groups()) > 0:
                 description = match.group(1)
