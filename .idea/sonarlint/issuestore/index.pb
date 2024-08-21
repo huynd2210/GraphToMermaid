@@ -25,7 +25,5 @@ G
 adapter/utils.py,f\4\f40ac8109c87b366e8917b47d552372fc6652f14
 C
 adapter/__init__.py,4\2\422cbf9e847729bb179a539d0644a25c689146ba
-F
-adapter/DefaultNode.py,a\e\aed17c153f6f4f2acdcdae7dc66db93c0f55fa9d
 I
 adapter/MermaidAdapter.py,9\a\9aa153d1d6d40db087b327e219bf6be1cc371bf2

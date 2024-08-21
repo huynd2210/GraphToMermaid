@@ -21,8 +21,6 @@ P
  adapter/GraphToMermaidAdapter.py,c\6\c6aa022047324277ddbfc487ebc92bce2f5ec754
 P
  adapter/MermaidToGraphAdapter.py,e\3\e3d9d18740aa7e41c4569efd15e1ffe261c9bb0b
-F
-adapter/DefaultNode.py,a\e\aed17c153f6f4f2acdcdae7dc66db93c0f55fa9d
 G
 adapter/DefaultGraph.py,9\7\9743a219a0ae43c1760f3e68e2b0da423e3b09f4
 I
