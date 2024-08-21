@@ -5,18 +5,30 @@ from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
 
 from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
 from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
-from adapter.Parser import extractNodes, isLineContainsLink, extractEdgesFromMermaid
+from adapter.Parser import extractNodes, extractEdgesFromMermaid
 
 
 def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
     # Preprocess
     # Extract nodes
+    #
+    # links in regex
     mermaid_links_types = {
-        "-->",
-        "---",
-        "-.->",
-        "==>",
-        "~~~"
+        r'-->(?:\|(.+?)\|)',
+        r'-.->(?:\|(.+?)\|)',
+        r'==>(?:\|(.+?)\|)',
+        r'---(?:\|(.+?)\|)',
+        r'~~~(?:\|(.+?)\|)', 
+        r'--\s*(.+?)\s*-->',
+        r'-.\s*(.+?)\s*.->',
+        r'==\s*(.+?)s*==>',
+        r'--\s*(.+?)\s*---',
+        r'~~\s*(.+?)\s*~~~',
+        r'-->',
+        r'-.->',
+        r'---',
+        r'~~~',
+        r'==='
     }
 
     delimiters = {
@@ -43,8 +55,8 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
         graph.add_node(id=nodeId, name=nodeLabel)
 
     for edge in edges:
-        origin, destination = edge
-        graph.add_edge(origin, destination)
+        origin, destination, description = edge
+        graph.add_edge(origin, destination, description)
 
     return graph
 
@@ -90,7 +102,6 @@ if __name__ == '__main__':
             3 --> 9
             3 --> 8
     """
-
 
     print("-_________")
 

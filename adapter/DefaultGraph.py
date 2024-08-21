@@ -12,8 +12,8 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
     def remove_node(self, node_id):
         self.graph.remove_node(node_id)
 
-    def add_edge(self, id1, id2):
-        self.graph.add_edge(id1, id2)
+    def add_edge(self, id1, id2, description = ""):
+        self.graph.add_edge(id1, id2, description=description)
 
     def remove_edge(self, id1, id2):
         self.graph.remove_edge(id1, id2)
