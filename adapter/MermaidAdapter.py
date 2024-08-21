@@ -1,11 +1,8 @@
-import pprint
-from typing import List, Set
-
 from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
 
 from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
 from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
-from adapter.Parser import extractNodes, isLineContainsLink, extractEdgesFromMermaid
+from adapter.Parser import extractNodes, extractEdgesFromMermaid
 
 
 def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
@@ -69,6 +66,7 @@ def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", titl
 
     return mermaidChart
 
+
 if __name__ == '__main__':
     mermaid_code = """
     flowchart TD
@@ -91,7 +89,6 @@ if __name__ == '__main__':
   3 --> 8
     """
 
-
     print("-_________")
 
     from adapter.DefaultGraph import DefaultGraph
@@ -104,7 +101,6 @@ if __name__ == '__main__':
     print("Printing mermaid code from graph")
     mermaid_code_from_graph = graph_to_mermaid(graph)
     print(mermaid_code_from_graph)
-
 
     # inp = " A-- This is the text! ---B"
     # firstNode = inp.split("-->")[0].strip()

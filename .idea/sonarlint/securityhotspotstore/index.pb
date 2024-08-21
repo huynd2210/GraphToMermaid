@@ -13,8 +13,6 @@ G
 examples/CustomGraph.py,4\0\40760c9a0f7f10a70d315a7985f427bdf0e0351b
 F
 examples/CustomNode.py,f\8\f8cc5548a341247b81c259057eb8aa11c3dd441e
-?
-adapter/main.py,c\8\c8411d9a38808c0a38baa57301b7dfdd1bb8fe38
 @
 adapter/utils.py,f\4\f40ac8109c87b366e8917b47d552372fc6652f14
 P
@@ -27,3 +25,7 @@ I
 adapter/MermaidAdapter.py,9\a\9aa153d1d6d40db087b327e219bf6be1cc371bf2
 C
 adapter/__init__.py,4\2\422cbf9e847729bb179a539d0644a25c689146ba
+7
+main.py,f\1\f1bdda93d9a278e358509d498e17d97764c1fb29
+A
+adapter/Parser.py,2\1\212867c8c7f449e402e82ccebbe2fec7949328e9
