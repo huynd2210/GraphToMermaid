@@ -1,6 +1,8 @@
 from typing import Set, List
-
+import re
 from adapter.utils import get_string_between_delimiters
+
+INT_MAX = 1e9
 
 def extractNodeLabel(line, delimiters) -> List[str]:
     for delimiter in delimiters:
@@ -25,7 +27,7 @@ def extractNodes(mermaidCode:str, delimiters: Set[str], mermaid_links_types: Set
     nodeIdsFromLinks = extractNodesFromLinks(mermaidCode, mermaid_links_types)
 
     for line in mermaid_code_as_list:
-        if not isLineContainsLink(line, mermaid_links_types):
+        if not extractEdgeDetailFromLine(line, mermaid_links_types)[0]:
             nodeLabel = extractNodeLabel(line, delimiters)
             nodeId = line[0]
             nodeIds_labels[nodeId] = nodeLabel
@@ -34,8 +36,6 @@ def extractNodes(mermaidCode:str, delimiters: Set[str], mermaid_links_types: Set
         if nodeId not in nodeIds_labels:
             nodeIds_labels[nodeId] = nodeId
     return nodeIds_labels
-
-    
 
 def extractNodeDeclarationFromMermaid(mermaid_code_as_list: List[str], delimiters) -> Set[str]:
     declarations = set()
@@ -51,7 +51,8 @@ def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: Set[str]):
     nodes = []
 
     for line in mermaid_code_as_list[1:]:
-        while link_type := isLineContainsLink(line, mermaid_links_types):
+        while (match := extractEdgeDetailFromLine(line, mermaid_links_types))[0]:
+            link_type = match[0]
             left_nodes = line.split(link_type, 1)[0].strip(" ")
             right_sides = line.split(link_type, 1)[1] # there maybe more links involved 
             line = right_sides
@@ -59,23 +60,16 @@ def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: Set[str]):
             for node in getNodeFromSite(left_nodes):
                 if node not in nodes: nodes.append(node)    
 
-            if not isLineContainsLink(line, mermaid_links_types):
+            if not extractEdgeDetailFromLine(line, mermaid_links_types)[0]:
                 for node in getNodeFromSite(line):
                     if node not in nodes: nodes.append(node)    
-
-
     return nodes
-
-def isLineContainsLink(line: str, mermaid_links_types: Set[str]):
-    for i in range(0, len(line) - 3):
-        for link_type in mermaid_links_types:
-            if link_type in line[i: i + 3]:
-                return link_type
-    return None
 
 def getNodeFromSite(site: str):
     return [node.strip() for node in site.split("&")]
-    
+
+def normalizedEdge(firstNodes: list[str], secondNodes: list[str], description = None):
+    return [(a, b, description) for a in firstNodes for b in secondNodes]  
 
 #TODO: Handle complex mermaid links
 def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
@@ -84,18 +78,35 @@ def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
     for line in mermaid_code_as_list:
         #If there is a link in the line, extract the edge (node connection)
         last_site = []
-        while link_type := isLineContainsLink(line, mermaid_links_types):
+        last_description = ""
+        while (match := extractEdgeDetailFromLine(line, mermaid_links_types))[0]: 
+            link_type = match[0]
             left_nodes = getNodeFromSite(line.split(link_type, 1)[0].strip())
-            if left_nodes:
-                for a in last_site:
-                    for b in left_nodes:
-                        edges.append((a, b))
-            
+            if last_site:
+                edges.extend(normalizedEdge(last_site, left_nodes, last_description))
+
+            last_description = match[1]
             line = line.split(link_type, 1)[1]
             last_site = left_nodes
             
-            if not isLineContainsLink(line, mermaid_links_types):
-                for a in last_site:
-                    for b in getNodeFromSite(line):
-                        edges.append((a, b)) 
+            if not extractEdgeDetailFromLine(line, mermaid_links_types)[0]:
+                edges.extend(normalizedEdge(left_nodes, getNodeFromSite(line), last_description))
     return edges
+
+def extractEdgeDetailFromLine(line, mermaid_links_types):
+    last_match, description, start_index = None, "", INT_MAX
+
+    for pattern in mermaid_links_types:
+        if match := re.search(pattern, line):
+            if match.start() >= start_index: 
+                continue
+            last_match = match.group(0)
+            if len(match.groups()) > 0:
+                description = match.group(1)
+            start_index = match.start()
+            
+    return (last_match, description)
+
+
+
+
