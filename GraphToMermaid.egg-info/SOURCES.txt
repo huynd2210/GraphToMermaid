@@ -1,0 +1,15 @@
+README.md
+setup.py
+GraphToMermaid.egg-info/PKG-INFO
+GraphToMermaid.egg-info/SOURCES.txt
+GraphToMermaid.egg-info/dependency_links.txt
+GraphToMermaid.egg-info/requires.txt
+GraphToMermaid.egg-info/top_level.txt
+adapter/DefaultGraph.py
+adapter/GraphToMermaidAdapter.py
+adapter/MermaidAdapter.py
+adapter/MermaidToGraphAdapter.py
+adapter/Parser.py
+adapter/__init__.py
+adapter/main.py
+adapter/utils.py

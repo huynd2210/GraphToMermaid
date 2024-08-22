@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='GraphToMermaid',
-    version='0.1.2',
+    version='0.1.3',
     author='huynd2210',
     description='Convert any graph like structure to a mermaid and vice versa',
     long_description_content_type='text/markdown',
@@ -19,7 +19,8 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'mermaid-builder',
-        're'
+        're',
+        'networkX',
         # add other dependencies
     ],
 )
