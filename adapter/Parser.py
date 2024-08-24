@@ -1,6 +1,7 @@
 from typing import Set, List
 import re
-from ..adapter.utils import get_string_between_delimiters
+
+from utils import get_string_between_delimiters
 
 INT_MAX = 1e9
 
@@ -11,15 +12,8 @@ def extractNodeLabel(line, delimiters) -> List[str]:
         if substring is not None:
             return substring
 
-def extractNodeLabelAndId(line, delimiters) -> List[str]:
-    for delimiter in delimiters:
-        firstDelimiter, secondDelimiter = delimiter
-        node_label = get_string_between_delimiters(line, firstDelimiter, secondDelimiter)
-        node_id = line.split(firstDelimiter, 1)[0]
-        if substring is not None:
-            return (node_id, node_label)
 
-def extractNodes(mermaidCode:str, delimiters: Set[str], mermaid_links_types: Set[str]) -> dict:
+def extractNodes(mermaidCode:str, delimiters: Set[str], mermaid_links_types: List[str]) -> dict:
     mermaid_code_as_list = mermaidCode.strip('\n').split("\n")[1:]
     mermaid_code_as_list = [line.strip() for line in mermaid_code_as_list if line.strip()]
     nodeIds_labels = {}
@@ -46,7 +40,7 @@ def extractNodeDeclarationFromMermaid(mermaid_code_as_list: List[str], delimiter
                 declarations.add(line)
     return declarations
 
-def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: Set[str]):
+def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: List[str]):
     mermaid_code_as_list = mermaidCode.strip("\n").split("\n")
     nodes = []
 
@@ -70,9 +64,7 @@ def getNodeFromSite(site: str):
 
 def normalizedEdge(firstNodes: list[str], secondNodes: list[str], description = None):
     return [(a, b, description) for a in firstNodes for b in secondNodes]  
-
-#TODO: Handle complex mermaid links
-def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: Set[str]):
+def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: List[str]):
     mermaid_code_as_list = mermaidCode.strip("\n").split("\n")
     edges = []
     for line in mermaid_code_as_list:

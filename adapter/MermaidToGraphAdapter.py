@@ -18,7 +18,7 @@ class MermaidToGraphAdapter(ABC):
 
 
     @abstractmethod
-    def add_edge(self, id1, id2):
+    def add_edge(self, id1, id2, description = ""):
         """
         Add an edge to the graph
         :param id1:

@@ -1,4 +1,4 @@
-from ..adapter import MermaidAdapter
+from adapter import MermaidAdapter
 import networkx as nx
 # import matplotlib.pyplot as plt
 

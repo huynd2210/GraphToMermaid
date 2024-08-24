@@ -1,8 +1,8 @@
 from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
 
-from ..adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
-from ..adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
-from ..adapter.Parser import extractNodes, extractEdgesFromMermaid
+from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
+from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
+from adapter.Parser import extractNodes, extractEdgesFromMermaid
 
 def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
     # Preprocess

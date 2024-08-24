@@ -19,7 +19,6 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'mermaid-builder',
-        're',
         'networkX',
         # add other dependencies
     ],

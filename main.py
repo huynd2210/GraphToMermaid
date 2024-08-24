@@ -1,7 +1,7 @@
 # Example usage for a Computer Science topic graph
 # TODO: Turn this into CLI tool as well as pip-installable package
-from build.lib.adapter.DefaultGraph import DefaultGraph
-from build.lib.adapter.MermaidAdapter import mermaid_to_graph, graph_to_mermaid
+from adapter.DefaultGraph import DefaultGraph
+from adapter.MermaidAdapter import mermaid_to_graph, graph_to_mermaid
 
 mermaid_code = """
   flowchart TB
