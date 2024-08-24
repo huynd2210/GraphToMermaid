@@ -54,6 +54,16 @@ def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: Set[str]):
     return nodes
 
 def isLineContainsLink(line: str, mermaid_links_types: Set[str]):
+    """
+    Checks if the line contains any of the specified mermaid link types.
+
+    Args:
+        line (str): The line to check for links.
+        mermaid_links_types (Set[str]): The set of mermaid link types to look for.
+
+    Returns:
+        str: The link type found in the line, or False if none found.
+    """
     for link_type in mermaid_links_types:
         if link_type in line:
             return link_type
