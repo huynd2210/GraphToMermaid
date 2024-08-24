@@ -31,3 +31,11 @@ class GraphToMermaidAdapter(ABC):
         :return List of node identifiers:
         """
         pass
+    
+    @abstractmethod
+    def get_edges_description(self) -> List[str]:
+        """
+        Returns the of edges of all nodes in the graph
+        :return List of edges
+        """
+        pass
