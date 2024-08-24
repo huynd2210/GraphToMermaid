@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="PyDocumentationSettings">
+    <option name="format" value="GOOGLE" />
+    <option name="myDocStringFormat" value="Google" />
+  </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="8d1c0372-5874-418d-b6b6-b81edf5d08c1" />
+  </component>
+</module>
