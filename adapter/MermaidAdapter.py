@@ -1,8 +1,9 @@
-from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
+from mermaid_builder.flowchart import Chart, ChartDir, Node, Link, NodeShape
 
 from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
 from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
 from adapter.Parser import extractNodes, extractEdgesFromMermaid
+from collections import defaultdict
 
 def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
     # Preprocess
@@ -28,27 +29,27 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
     ]
 
     delimiters = {
-        ("[", "]"),
-        ("(", ")"),
-        ('{', '}'),
-        ('{{', '}}'),
-        ('([', '])'),
-        ('[[', ']]'),
-        ('[(', ')]'),
-        ('>', ']'),
-        ('[/', '/]'),
-        ('[\\', '\\]'),
-        ('[/', '\\]'),
-        ('[\\', '/]'),
-        ('((', '))')
+        ('[\\', '\\]'): NodeShape.RECT_ROUND,
+        ('[/', '\\]'): NodeShape.RECT_ROUND,
+        ('[\\', '/]'): NodeShape.RECT_ROUND,
+        ('[(', ')]'): NodeShape.CYLINDER,
+        ('[[', ']]'): NodeShape.SUBROUTINE,
+        ('([', '])'): NodeShape.STADIUM,
+        ('((', '))'): NodeShape.CIRCLE,
+        ('{{', '}}'): NodeShape.HEXAGON,
+        ('[/', '/]'): NodeShape.RECT_ROUND,
+        ('>', ']'): NodeShape.ASSYMETRIC,
+        ("[", "]"): NodeShape.RECT_ROUND, 
+        ("(", ")"): NodeShape.RECT_ROUND,
+        ('{', '}'): NodeShape.RECT_ROUND
     }
 
     nodes = extractNodes(mermaid_code, delimiters, mermaid_links_types)
     edges = extractEdgesFromMermaid(mermaid_code, mermaid_links_types)
 
-    for node in nodes.items():
-        nodeId, nodeLabel = node
-        graph.add_node(id=nodeId, name=nodeLabel)
+    for node in nodes:
+        nodeId, nodeLabel, nodeShape = node
+        graph.add_node(id=nodeId, name=nodeLabel, shape = nodeShape)
 
     for edge in edges:
         origin, destination, description = edge
@@ -70,7 +71,8 @@ def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", titl
 
     for node in graph.getAllNodesId():
         mermaidNodeLabel = graph.get_node_label_by_id(node)
-        mermaidChart.add_node(Node(title=mermaidNodeLabel, id=node))
+        mermaidNodeShape = graph.get_node_shape_by_id(node)
+        mermaidChart.add_node(Node(title=mermaidNodeLabel, id=node, shape=mermaidNodeShape))
 
         for neighbor in graph.get_node_neighbors_id_by_id(node):
             description = graph.get_edges_description(node, neighbor)

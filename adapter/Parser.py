@@ -6,17 +6,17 @@ from utils import get_string_between_delimiters
 INT_MAX = 1e9
 
 def extractNodeLabel(line, delimiters) -> List[str]:
-    for delimiter in delimiters:
+    for delimiter in delimiters.keys():
         firstDelimiter, secondDelimiter = delimiter
         substring = get_string_between_delimiters(line, firstDelimiter, secondDelimiter)
         if substring is not None:
-            return substring
+            return (substring, delimiters[delimiter])
 
 
 def extractNodes(mermaidCode:str, delimiters: Set[str], mermaid_links_types: List[str]) -> dict:
     mermaid_code_as_list = mermaidCode.strip('\n').split("\n")[1:]
     mermaid_code_as_list = [line.strip() for line in mermaid_code_as_list if line.strip()]
-    nodeIds_labels = {}
+    nodeIds_labels = []
 
     nodeIdsFromLinks = extractNodesFromLinks(mermaidCode, mermaid_links_types)
 
@@ -24,11 +24,13 @@ def extractNodes(mermaidCode:str, delimiters: Set[str], mermaid_links_types: Lis
         if not extractEdgeDetailFromLine(line, mermaid_links_types)[0]:
             nodeLabel = extractNodeLabel(line, delimiters)
             nodeId = line[0]
-            nodeIds_labels[nodeId] = nodeLabel
+            nodeIds_label = nodeLabel[0]
+            nodeIds_shape = nodeLabel[1]
+            nodeIds_labels.append((nodeId, nodeIds_label, nodeIds_shape)) 
 
     for nodeId in nodeIdsFromLinks:
-        if nodeId not in nodeIds_labels:
-            nodeIds_labels[nodeId] = nodeId
+        if nodeId not in list(zip(*nodeIds_labels))[0]:
+            nodeIds_labels.append((nodeId, nodeId, delimiters[('(', ')')]))
     return nodeIds_labels
 
 def extractNodeDeclarationFromMermaid(mermaid_code_as_list: List[str], delimiters) -> Set[str]:
@@ -62,8 +64,11 @@ def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: List[str]):
 def getNodeFromSite(site: str):
     return [node.strip() for node in site.split("&")]
 
+
 def normalizedEdge(firstNodes: list[str], secondNodes: list[str], description = None):
     return [(a, b, description) for a in firstNodes for b in secondNodes]  
+
+
 def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: List[str]):
     mermaid_code_as_list = mermaidCode.strip("\n").split("\n")
     edges = []

@@ -6,8 +6,8 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
     def __init__(self):
         self.graph = nx.DiGraph()
 
-    def add_node(self, id, name=None, data=None):
-        self.graph.add_node(id, name=name, data=data)
+    def add_node(self, id, name=None, data=None, shape=None):
+        self.graph.add_node(id, name=name, data=data, shape=shape)
 
     def remove_node(self, node_id):
         self.graph.remove_node(node_id)
@@ -23,6 +23,9 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
 
     def get_node_label_by_id(self, identifier):
         return self.graph.nodes[identifier]["name"]
+
+    def get_node_shape_by_id(self, identifier):
+        return self.graph.nodes[identifier]["shape"]
 
     def get_node_neighbors_id_by_id(self, identifier):
         return self.graph.neighbors(identifier)
