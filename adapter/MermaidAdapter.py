@@ -10,17 +10,18 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
     # Extract nodes
     #
     # links in regex
+
     mermaid_links_types = [
         r'-->(?:\|(.+?)\|)',
         r'-.->(?:\|(.+?)\|)',
         r'==>(?:\|(.+?)\|)',
         r'---(?:\|(.+?)\|)',
         r'~~~(?:\|(.+?)\|)', 
-        r'--\s*(.+?)\s*-->',
-        r'-.\s*(.+?)\s*.->',
-        r'==\s*(.+?)s*==>',
-        r'--\s*(.+?)\s*---',
-        r'~~\s*(.+?)\s*~~~',
+        r'--\s+(.+?)\s+-->',
+        r'-.\s+(.+?)\s+.->',
+        r'==\s+(.+?)s+==>',
+        r'--\s+(.+?)\s+---',
+        r'~~\s+(.+?)\s+~~~',
         r'-->',
         r'-.->',
         r'---',
@@ -76,9 +77,9 @@ def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", titl
 
         for neighbor in graph.get_node_neighbors_id_by_id(node):
             description = graph.get_edges_description(node, neighbor)
-            mermaidChart.add_link(Link(src=node, dest=neighbor, text = description))
+            mermaidChart.add_link(Link(src=node, dest=neighbor, text=description))
 
-    return mermaidChart
+    return str(mermaidChart)
 
 
 if __name__ == '__main__':

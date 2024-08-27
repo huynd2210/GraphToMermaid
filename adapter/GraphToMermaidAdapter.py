@@ -33,7 +33,7 @@ class GraphToMermaidAdapter(ABC):
         pass
     
     @abstractmethod
-    def get_edges_description(self) -> List[str]:
+    def get_edges_description(self, id1: str, id2: str) -> List[str]:
         """
         Returns the of edges of all nodes in the graph
         :return List of edges

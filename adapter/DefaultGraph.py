@@ -1,4 +1,5 @@
 from adapter import MermaidAdapter
+from mermaid_builder.flowchart import NodeShape
 import networkx as nx
 # import matplotlib.pyplot as plt
 
@@ -6,7 +7,7 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
     def __init__(self):
         self.graph = nx.DiGraph()
 
-    def add_node(self, id, name=None, data=None, shape=None):
+    def add_node(self, id, name=None, data=None, shape=NodeShape.RECT_ROUND):
         self.graph.add_node(id, name=name, data=data, shape=shape)
 
     def remove_node(self, node_id):
