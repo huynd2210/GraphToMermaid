@@ -1,4 +1,4 @@
-from mermaid_builder.flowchart import Chart, ChartDir, Node, Link, NodeShape
+from mermaid_builder.mermaid_builder import Chart, ChartDir, Node, Link, NodeShape
 
 from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
 from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
@@ -30,19 +30,19 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
     ]
 
     delimiters = {
-        ('[\\', '\\]'): NodeShape.RECT_ROUND,
-        ('[/', '\\]'): NodeShape.RECT_ROUND,
-        ('[\\', '/]'): NodeShape.RECT_ROUND,
+        ('[\\', '\\]'): NodeShape.PARALLELOGRAM_LEFT,
+        ('[/', '\\]'): NodeShape.TRAPEZ_UP,
+        ('[\\', '/]'): NodeShape.TRAPEZ_DOWN,
         ('[(', ')]'): NodeShape.CYLINDER,
         ('[[', ']]'): NodeShape.SUBROUTINE,
         ('([', '])'): NodeShape.STADIUM,
         ('((', '))'): NodeShape.CIRCLE,
         ('{{', '}}'): NodeShape.HEXAGON,
-        ('[/', '/]'): NodeShape.RECT_ROUND,
+        ('[/', '/]'): NodeShape.PARALLELOGRAM_RIGHT,
         ('>', ']'): NodeShape.ASSYMETRIC,
-        ("[", "]"): NodeShape.RECT_ROUND, 
+        ("[", "]"): NodeShape.RECT, 
         ("(", ")"): NodeShape.RECT_ROUND,
-        ('{', '}'): NodeShape.RECT_ROUND
+        ('{', '}'): NodeShape.RHOMBUS
     }
 
     nodes = extractNodes(mermaid_code, delimiters, mermaid_links_types)

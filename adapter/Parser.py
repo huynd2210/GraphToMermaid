@@ -66,7 +66,6 @@ def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: List[str]):
 def getNodeFromSite(site: str,):
     return [node.strip() for node in site.split("&")]
 
-
 def normalizedEdge(firstNodes: list[str], secondNodes: list[str], description = None):
     return [(a, b, description) for a in firstNodes for b in secondNodes]  
 

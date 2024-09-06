@@ -89,5 +89,6 @@ class testAdapter(unittest.TestCase):
                 C --> E
         """
 
+if __name__ == "__main__":
+    unittest.main()
 
-        

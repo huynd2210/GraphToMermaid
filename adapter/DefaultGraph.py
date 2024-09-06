@@ -1,5 +1,5 @@
 from adapter import MermaidAdapter
-from mermaid_builder.flowchart import NodeShape
+from mermaid_builder.mermaid_builder import NodeShape
 import networkx as nx
 # import matplotlib.pyplot as plt
 
