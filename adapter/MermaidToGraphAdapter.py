@@ -3,7 +3,10 @@ This interface requires 2 methods: add_node and add_edge
 """
 from abc import ABC, abstractmethod
 
-class MermaidToGraphAdapter(ABC):
+import networkx as nx
+
+
+class MermaidToGraphAdapter(ABC, nx.Graph):
 
     @abstractmethod
     def add_node(self, id, name=None, data=None):
