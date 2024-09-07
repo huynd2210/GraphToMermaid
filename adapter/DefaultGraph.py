@@ -37,11 +37,11 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
     def getAllNodesId(self):
         return list(self.graph.nodes())
 
-    def get_all_edges_description(self):
+    def __get_all_edges_description(self):
         return nx.get_edge_attributes(self.graph, "description")
 
     def get_edges_description(self, id1, id2):
-        return self.get_all_edges_description()[(id1, id2)] 
+        return self.__get_all_edges_description()[(id1, id2)]
     
     '''
     def show_graph(self):
