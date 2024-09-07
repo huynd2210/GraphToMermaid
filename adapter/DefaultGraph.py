@@ -4,8 +4,6 @@ import networkx as nx
 # import matplotlib.pyplot as plt
 
 
-#TODO: Resolve disrepancy between the abstract classes and this default implementation.
-# Preferably a github issue, e.g methods exists here used in MermaidAdapter but not in the abstract classes
 class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidToGraphAdapter):
     def __init__(self):
         self.graph = nx.DiGraph()
@@ -29,7 +27,7 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
         return self.graph.nodes[identifier]["name"]
 
     def get_node_shape_by_id(self, identifier):
-        return self.graph.nodes[identifier]["shape"]
+        return self.graph.nodes[identifier]["shape"] if "shape" in self.graph.nodes[identifier] else NodeShape.RECT_ROUND
 
     def get_node_neighbors_id_by_id(self, identifier):
         return self.graph.neighbors(identifier)
