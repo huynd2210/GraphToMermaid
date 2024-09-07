@@ -6,7 +6,7 @@ import networkx as nx
 """
 This is an interface that defines the interface for converting a graph to a Mermaid string.`
 """
-class GraphToMermaidAdapter(ABC, nx.Graph):
+class GraphToMermaidAdapter(ABC):
 
     @abstractmethod
     def get_node_label_by_id(self, identifier) -> str:

@@ -3,6 +3,9 @@ from mermaid_builder.mermaid_builder import NodeShape
 import networkx as nx
 # import matplotlib.pyplot as plt
 
+
+#TODO: Resolve disrepancy between the abstract classes and this default implementation.
+# Preferably a github issue, e.g methods exists here used in MermaidAdapter but not in the abstract classes
 class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidToGraphAdapter):
     def __init__(self):
         self.graph = nx.DiGraph()
