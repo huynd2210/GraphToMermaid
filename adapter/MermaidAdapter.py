@@ -59,7 +59,7 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
     return graph
 
 
-def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", title=""):
+def graph_to_mermaid(graph: GraphToMermaidAdapter | MermaidToGraphAdapter, diagramType: str = "TD", title=""):
     ChartDirection = {
         "LR": ChartDir.LR,
         "TD": ChartDir.TD,

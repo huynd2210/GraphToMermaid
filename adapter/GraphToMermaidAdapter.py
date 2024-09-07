@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import List
+
+import networkx as nx
+
 """
 This is an interface that defines the interface for converting a graph to a Mermaid string.`
 """
-class GraphToMermaidAdapter(ABC):
+class GraphToMermaidAdapter(ABC, nx.Graph):
 
     @abstractmethod
     def get_node_label_by_id(self, identifier) -> str:
