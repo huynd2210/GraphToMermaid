@@ -21,11 +21,12 @@ class NodeShape(Enum):
     ASSYMETRIC = ">VAL]"
     RHOMBUS = "{VAL}"
     HEXAGON = "{{VAL}}"
-    PARALLELOGRAM_LEFT = "[\\VAL\\]"
-    TRAPEZ_UP = '[/VAL\\]'
-    TRAPEZ_DOWN = '[\\VAL/]'
-    PARALLELOGRAM_RIGHT = '[/VAL/]'
+    PARALLELOGRAM_ALT = "[\\VAL\\]"
+    TRAPEZOID = '[/VAL\\]'
+    TRAPEZOID_ALT = '[\\VAL/]'
+    PARALLELOGRAM = '[/VAL/]'
     RECT = "[VAL]" 
+    DOUBLE_CIRCLE = "(((VAL)))"
 
     def wrap(self, text: str) -> str:
         return self.value.replace('VAL', text)
@@ -34,7 +35,9 @@ class LinkType(Enum):
     ARROW = '-->'
     OPEN = '---'
     INVISIBLE = '~~~'
-
+    DOTTED = '-.->'
+    THICK = '==>'
+    
 
 @dataclass
 class NodeStyle:
@@ -113,6 +116,7 @@ class Link:
         if isinstance(self.src, Node):
             src_id = self.src.get_id()
         dest_id = self.dest
+
         if isinstance(self.dest, Node):
             dest_id = self.dest.get_id()
         link_text = ''
@@ -152,7 +156,6 @@ class ClassAttachment:
         elif isinstance(nodes[0], Node):
             nodes = [node.get_id() for node in nodes]
         return f'class {",".join(nodes)} {self.class_name};'
-
 
 @dataclass
 class Chart:

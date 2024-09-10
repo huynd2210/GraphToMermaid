@@ -1,9 +1,10 @@
-from mermaid_builder.mermaid_builder import Chart, ChartDir, Node, Link, NodeShape
+from mermaid_builder.mermaid_builder import Chart, ChartDir, Node, Link, NodeShape, LinkType
 
 from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
 from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
 from adapter.Parser import extractNodes, extractEdgesFromMermaid
-from collections import defaultdict
+import adapter.DefaultGraph
+import networkx as nx
 
 def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
     # Preprocess
@@ -11,34 +12,34 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
     #
     # links in regex
 
-    mermaid_links_types = [
-        r'-->(?:\|(.+?)\|)',
-        r'-.->(?:\|(.+?)\|)',
-        r'==>(?:\|(.+?)\|)',
-        r'---(?:\|(.+?)\|)',
-        r'~~~(?:\|(.+?)\|)', 
-        r'--\s+(.+?)\s+-->',
-        r'-.\s+(.+?)\s+.->',
-        r'==\s+(.+?)s+==>',
-        r'--\s+(.+?)\s+---',
-        r'~~\s+(.+?)\s+~~~',
-        r'-->',
-        r'-.->',
-        r'---',
-        r'~~~',
-        r'==='
-    ]
+    mermaid_links_types = {
+        r'-->(?:\|(.+?)\|)': LinkType.ARROW,
+        r'-.->(?:\|(.+?)\|)': LinkType.DOTTED,
+        r'==>(?:\|(.+?)\|)': LinkType.THICK,
+        r'---(?:\|(.+?)\|)': LinkType.OPEN,
+        r'~~~(?:\|(.+?)\|)': LinkType.INVISIBLE,
+        r'--\s+(.+?)\s+-->': LinkType.ARROW,
+        r'-.\s+(.+?)\s+.->': LinkType.DOTTED,
+        r'==\s+(.+?)s+==>': LinkType.THICK,
+        r'--\s+(.+?)\s+---': LinkType.OPEN,
+        r'~~\s+(.+?)\s+~~~': LinkType.INVISIBLE,
+        r'-->': LinkType.ARROW,
+        r'-.->': LinkType.DOTTED,
+        r'---': LinkType.OPEN,
+        r'~~~': LinkType.INVISIBLE,
+        r'==>': LinkType.THICK
+    }
 
     delimiters = {
-        ('[\\', '\\]'): NodeShape.PARALLELOGRAM_LEFT,
-        ('[/', '\\]'): NodeShape.TRAPEZ_UP,
-        ('[\\', '/]'): NodeShape.TRAPEZ_DOWN,
+        ('[\\', '\\]'): NodeShape.PARALLELOGRAM_ALT,
+        ('[/', '\\]'): NodeShape.TRAPEZOID,
+        ('[\\', '/]'): NodeShape.TRAPEZOID_ALT,
         ('[(', ')]'): NodeShape.CYLINDER,
         ('[[', ']]'): NodeShape.SUBROUTINE,
         ('([', '])'): NodeShape.STADIUM,
         ('((', '))'): NodeShape.CIRCLE,
         ('{{', '}}'): NodeShape.HEXAGON,
-        ('[/', '/]'): NodeShape.PARALLELOGRAM_RIGHT,
+        ('[/', '/]'): NodeShape.PARALLELOGRAM,
         ('>', ']'): NodeShape.ASSYMETRIC,
         ("[", "]"): NodeShape.RECT, 
         ("(", ")"): NodeShape.RECT_ROUND,
@@ -58,8 +59,7 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
 
     return graph
 
-
-def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", title=""):
+def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", title=""): 
     ChartDirection = {
         "LR": ChartDir.LR,
         "TD": ChartDir.TD,
@@ -67,6 +67,8 @@ def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", titl
         "RL": ChartDir.RL,
         "BT": ChartDir.BT,
     }
+    
+    graph = adapter.DefaultGraph.Graph_factory.create_graph(graph)
 
     mermaidChart = Chart(title=title, direction=ChartDirection[diagramType])
 
