@@ -27,4 +27,5 @@ print(graph)
 print("------")
 mermaid_code_from_graph = graph_to_mermaid(graph)
 print(mermaid_code_from_graph)
-
+print('--------')
+print(isinstance(graph, DefaultGraph))
