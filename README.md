@@ -8,6 +8,8 @@ pip install GraphToMermaid
 ```
 
 ### Quick Start
+GraphToMermaid offers a pre-defined graph implementation (DefaultGraph) that works out of the box. 
+Note: DefaultGraph uses NetworkX graph implementation.
 Converting mermaid code to pre-defined graph:
 ```python
 from adapter.MermaidAdapter import mermaid_to_graph
