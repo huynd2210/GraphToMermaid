@@ -8,12 +8,16 @@ from adapter.MermaidAdapter import mermaid_to_graph, graph_to_mermaid
 mermaid_code = """
   flowchart TB
     A[Alibaba]
-    D[//logger//]
+    D[/logger/]
     A -- bruh --> D & S -->|lagger| E & B
     S --> A
     D --> B
+<<<<<<< HEAD
+    G ~~~ S 
+=======
     G ~~~ S
 
+>>>>>>> b820043b1f8028abea24d21d63fd8655f95ad5e5
 """
 
 graph = DefaultGraph()

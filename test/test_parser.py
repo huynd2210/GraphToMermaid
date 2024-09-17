@@ -1,56 +1,56 @@
 import unittest
 from adapter.Parser import *
-from mermaid_builder.flowchart import Chart, ChartDir, Node, Link, NodeShape
+from mermaid_builder.mermaid_builder import Chart, ChartDir, Node, Link, NodeShape, LinkType
 
 class testParser(unittest.TestCase):
-    delimiters = {
-        ('[\\', '\\]'): NodeShape.RECT_ROUND,
-        ('[/', '\\]'): NodeShape.RECT_ROUND,
-        ('[\\', '/]'): NodeShape.RECT_ROUND,
+    delimiters =  {
+        ('[\\', '\\]'): NodeShape.PARALLELOGRAM_ALT,
+        ('[/', '\\]'): NodeShape.TRAPEZOID,
+        ('[\\', '/]'): NodeShape.TRAPEZOID_ALT,
         ('[(', ')]'): NodeShape.CYLINDER,
         ('[[', ']]'): NodeShape.SUBROUTINE,
         ('([', '])'): NodeShape.STADIUM,
         ('((', '))'): NodeShape.CIRCLE,
         ('{{', '}}'): NodeShape.HEXAGON,
-        ('[/', '/]'): NodeShape.RECT_ROUND,
+        ('[/', '/]'): NodeShape.PARALLELOGRAM,
         ('>', ']'): NodeShape.ASSYMETRIC,
-        ("[", "]"): NodeShape.RECT_ROUND, 
+        ("[", "]"): NodeShape.RECT, 
         ("(", ")"): NodeShape.RECT_ROUND,
-        ('{', '}'): NodeShape.RECT_ROUND
+        ('{', '}'): NodeShape.RHOMBUS
     }
 
-    mermaid_links_types = [
-        r'-->(?:\|(.+?)\|)',
-        r'-.->(?:\|(.+?)\|)',
-        r'==>(?:\|(.+?)\|)',
-        r'---(?:\|(.+?)\|)',
-        r'~~~(?:\|(.+?)\|)', 
-        r'--\s+(.+?)\s+-->',
-        r'-.\s+(.+?)\s+.->',
-        r'==\s+(.+?)\s+==>',
-        r'--\s+(.+?)\s+---',
-        r'~~\s+(.+?)\s+~~~',
-        r'-->',
-        r'-.->',
-        r'---',
-        r'~~~',
-        r'==>'
-    ]
+    mermaid_links_types = {
+        r'-->(?:\|(.+?)\|)': LinkType.ARROW,
+        r'-.->(?:\|(.+?)\|)': LinkType.DOTTED,
+        r'==>(?:\|(.+?)\|)': LinkType.THICK,
+        r'---(?:\|(.+?)\|)': LinkType.OPEN,
+        r'~~~(?:\|(.+?)\|)': LinkType.INVISIBLE,
+        r'--\s+(.+?)\s+-->': LinkType.ARROW,
+        r'-.\s+(.+?)\s+.->': LinkType.DOTTED,
+        r'==\s+(.+?)\s+==>': LinkType.THICK,
+        r'--\s+(.+?)\s+---': LinkType.OPEN,
+        r'~~\s+(.+?)\s+~~~': LinkType.INVISIBLE,
+        r'-->': LinkType.ARROW,
+        r'-.->': LinkType.DOTTED,
+        r'---': LinkType.OPEN,
+        r'~~~': LinkType.INVISIBLE,
+        r'==>': LinkType.THICK
+    }
 
     def testExtractNodeLabel(self):
         self.assertEqual(extractNodeLabel('A', self.delimiters), None)        
         self.assertEqual(extractNodeLabel('A(access)', self.delimiters), ('access', NodeShape.RECT_ROUND))
-        self.assertEqual(extractNodeLabel('A[access]', self.delimiters), ('access', NodeShape.RECT_ROUND))
-        self.assertEqual(extractNodeLabel('A{access}', self.delimiters), ('access', NodeShape.RECT_ROUND))
+        self.assertEqual(extractNodeLabel('A[access]', self.delimiters), ('access', NodeShape.RECT))
+        self.assertEqual(extractNodeLabel('A{access}', self.delimiters), ('access', NodeShape.RHOMBUS))
         self.assertEqual(extractNodeLabel('A>access]', self.delimiters), ('access', NodeShape.ASSYMETRIC))
-        self.assertEqual(extractNodeLabel('A[/access/]', self.delimiters), ('access', NodeShape.RECT_ROUND))
+        self.assertEqual(extractNodeLabel('A[/access/]', self.delimiters), ('access', NodeShape.PARALLELOGRAM))
         self.assertEqual(extractNodeLabel('A{{access}}', self.delimiters), ('access', NodeShape.HEXAGON))
         self.assertEqual(extractNodeLabel('A((access))', self.delimiters), ('access', NodeShape.CIRCLE))
         self.assertEqual(extractNodeLabel('A[[access]]', self.delimiters), ('access', NodeShape.SUBROUTINE))
         self.assertEqual(extractNodeLabel('A[(access)]', self.delimiters), ('access', NodeShape.CYLINDER))
-        self.assertEqual(extractNodeLabel('A[\\access/]', self.delimiters), ('access', NodeShape.RECT_ROUND))
-        self.assertEqual(extractNodeLabel('A[/access\\]', self.delimiters), ('access', NodeShape.RECT_ROUND))
-        self.assertEqual(extractNodeLabel('A[\\access\\]', self.delimiters), ('access', NodeShape.RECT_ROUND))
+        self.assertEqual(extractNodeLabel('A[\\access/]', self.delimiters), ('access', NodeShape.TRAPEZOID_ALT))
+        self.assertEqual(extractNodeLabel('A[/access\\]', self.delimiters), ('access', NodeShape.TRAPEZOID))
+        self.assertEqual(extractNodeLabel('A[\\access\\]', self.delimiters), ('access', NodeShape.PARALLELOGRAM_ALT))
  
         self.assertEqual(extractNodeLabel('A>boo]', self.delimiters), ('boo', NodeShape.ASSYMETRIC)) 
         self.assertEqual(extractNodeLabel('A[(alibaba32_32!)]', self.delimiters), ('alibaba32_32!', NodeShape.CYLINDER))

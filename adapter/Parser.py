@@ -41,15 +41,15 @@ def extractNodeDeclarationFromMermaid(mermaid_code_as_list: List[str], delimiter
                 declarations.add(line)
     return declarations
 
-def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: List[str]):
+def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: dict[str]):
     mermaid_code_as_list = mermaidCode.strip("\n").split("\n")
     nodes = []
 
     for line in mermaid_code_as_list[1:]:
         while (match := extractEdgeDetailFromLine(line, mermaid_links_types))[0]:
-            link_type = match[0]
-            left_nodes = line.split(link_type, 1)[0].strip(" ")
-            right_sides = line.split(link_type, 1)[1] # there maybe more links involved 
+            link = match[0]
+            left_nodes = line.split(link, 1)[0].strip(" ")
+            right_sides = line.split(link, 1)[1] # there maybe more links involved 
             line = right_sides
 
             for node in getNodeFromSite(left_nodes):
@@ -63,7 +63,7 @@ def extractNodesFromLinks(mermaidCode: str, mermaid_links_types: List[str]):
                     if node not in nodes: nodes.append(node)    
     return nodes
 
-def getNodeFromSite(site: str,):
+def getNodeFromSite(site: str):
     return [node.strip() for node in site.split("&")]
 
 def normalizedEdge(firstNodes: list[str], secondNodes: list[str], description = None):
@@ -74,19 +74,18 @@ def extractEdgesFromMermaidLine(line: str, mermaid_links_types: List[str]):
     last_site, last_description, left_nodes = [], '', ''
         
     while (match := extractEdgeDetailFromLine(line, mermaid_links_types))[0]: 
-        link_type = match[0]
-        left_nodes = getNodeFromSite(line.split(link_type, 1)[0])
+        link = match[0]
+        left_nodes = getNodeFromSite(line.split(link, 1)[0])
         if last_site:
             edges.extend(normalizedEdge(last_site, left_nodes, last_description))
 
         last_description = match[1]
-        line = line.split(link_type, 1)[1]
+        line = line.split(link, 1)[1]
         last_site = left_nodes 
     else: 
         edges.extend(normalizedEdge(left_nodes, getNodeFromSite(line), last_description))
     
-    return edges
-    
+    return edges 
 
 def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: List[str]):
     mermaid_code_as_list = mermaidCode.strip("\n").split("\n")
@@ -98,7 +97,7 @@ def extractEdgesFromMermaid(mermaidCode: str, mermaid_links_types: List[str]):
 def extractEdgeDetailFromLine(line, mermaid_links_types) -> tuple:
     last_match, description, start_index, max_lenght = None, "", INT_MAX, 0
 
-    for pattern in mermaid_links_types:
+    for pattern in mermaid_links_types.keys():
         if match := re.search(pattern, line):
             if match.start() >= start_index:
                 continue
@@ -106,8 +105,5 @@ def extractEdgeDetailFromLine(line, mermaid_links_types) -> tuple:
             description = ''
             if len(match.groups()) > 0:
                 description = match.group(1)
-            start_index = min(match.start(), start_index)
-            
+            start_index = match.start() 
     return (last_match, description)
-
-
