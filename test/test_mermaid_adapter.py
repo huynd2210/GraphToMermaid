@@ -123,35 +123,40 @@ class testAdapter(unittest.TestCase):
 
         for a, b in zip(mermaid_code.strip("\n").split("\n"), evaluate_result.strip("\n").split("\n")):
             a, b = a.strip(" "), b.strip(" ")
-            # self.assertEqual(a, b)
+           # self.assertEqual(a, b)
 
 
-def test_mermaid_to_graph_should_retain_class_instance() -> None:
-    mermaid_code = """
-        flowchart TD
-            1(Computer Science)
-            4(Programming)
-            2(Algorithms)
-            7(Searching Algorithms)
-            6(Sorting Algorithms)
-            5(Databases)
-            3(Data Structures)
-            9(Linked Lists)
-            8(Arrays)
-            1 --> 4
-            1 --> 2
-            1 --> 5
-            1 --> 3
-            2 --> 7
-            2 --> 6
-            3 --> 9
-            3 --> 8
-        
-    """
-    graph = mermaid_to_graph(mermaid_code, DefaultGraph())
-    assert isinstance(graph, DefaultGraph)
-    assert isinstance(graph, MermaidToGraphAdapter)
-    assert not isinstance(graph, nx.Graph)
+    def test_mermaid_to_graph_should_retain_class_instance(this) -> None:
+        mermaid_code = """
+            flowchart TD
+                1(Computer Science)
+                4(Programming)
+                2(Algorithms)
+                7(Searching Algorithms)
+                6(Sorting Algorithms)
+                5(Databases)
+                3(Data Structures)
+                9(Linked Lists)
+                8(Arrays)
+                1 --> 4
+                1 --> 2
+                1 --> 5
+                1 --> 3
+                2 --> 7
+                2 --> 6
+                3 --> 9
+                3 --> 8
+            
+        """
+        graph = mermaid_to_graph(mermaid_code, DefaultGraph())
+        this.assertEqual(isinstance(graph, DefaultGraph), True)
+        this.assertEqual(isinstance(graph, MermaidToGraphAdapter), True)
+        this.assertEqual(isinstance(graph, nx.Graph), False)
+
+        graph = mermaid_to_graph(mermaid_code, nx.Graph())
+        this.assertEqual(isinstance(graph, DefaultGraph), False)
+        this.assertEqual(isinstance(graph, MermaidToGraphAdapter), False)
+        this.assertEqual(isinstance(graph, nx.Graph), True)
 
 if __name__ == "__main__":
     unittest.main()
