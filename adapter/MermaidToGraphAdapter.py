@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 import networkx as nx
 
 
-class MermaidToGraphAdapter(ABC, nx.Graph):
+class MermaidToGraphAdapter(ABC):
 
     @abstractmethod
     def add_node(self, id, name=None, data=None):

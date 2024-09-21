@@ -1,13 +1,17 @@
 from adapter import MermaidAdapter
+from mermaid_builder.mermaid_builder import NodeShape
 import networkx as nx
 # import matplotlib.pyplot as plt
 
 class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidToGraphAdapter):
-    def __init__(self):
-        self.graph = nx.DiGraph()
+    def __init__(self, graph: nx.Graph = None):
+        if not graph: 
+            self.graph = nx.DiGraph()
+        else:
+            self.graph = graph
 
-    def add_node(self, id, name=None, data=None):
-        self.graph.add_node(id, name=name, data=data)
+    def add_node(self, id, name=None, data=None, shape=NodeShape.RECT_ROUND):
+        self.graph.add_node(id, name=name, data=data, shape=shape)
 
     def remove_node(self, node_id):
         self.graph.remove_node(node_id)
@@ -24,6 +28,9 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
     def get_node_label_by_id(self, identifier):
         return self.graph.nodes[identifier]["name"]
 
+    def get_node_shape_by_id(self, identifier):
+        return self.graph.nodes[identifier]["shape"]
+
     def get_node_neighbors_id_by_id(self, identifier):
         return self.graph.neighbors(identifier)
 
@@ -35,6 +42,7 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
 
     def get_edges_description(self, id1, id2):
         return self.get_all_edges_description()[(id1, id2)] 
+
     
     '''
     def show_graph(self):
@@ -46,7 +54,7 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
         )
         nx.draw_networkx_labels(self.graph, pos = pos, font_size = 10, font_family = "sans-serif")
         nx.draw_networkx_edge_labels(self.graph, pos = pos,
-                                     edge_labels=labels, font_color="blue",
+                                      edge_labels=labels, font_color="blue",
                                      font_family="sans-serif", clip_on = False)
         plt.draw()
         plt.show()
@@ -59,3 +67,14 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
             result += f"{node} {self.get_node_label_by_id(node)} -> {str(neighbors)[1:-1]}\n"
         # self.show_graph()
         return result
+        
+class Graph_factory():
+    def __init__(self):
+        pass
+
+    def create_graph(self, graph: nx.Graph = None):
+        return DefaultGraph(graph)
+
+
+
+
