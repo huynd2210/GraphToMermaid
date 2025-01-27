@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Tuple
 """
-This is an interface that defines the interface for converting a graph to a Mermaid string.`
+This is an interface that defines the interface for converting a graph to a Mermaid string.
 """
 class GraphToMermaidAdapter(ABC):
 
@@ -12,6 +12,15 @@ class GraphToMermaidAdapter(ABC):
         id[Label]
         :param identifier:
         :return label of the node:
+        """
+        pass
+
+    @abstractmethod
+    def get_node_bracket_style(self, identifier) -> Tuple[str, str]:
+        """
+        Returns the bracket style of the node with the given identifier.
+        :param identifier:
+        :return: Tuple of (opening_bracket, closing_bracket)
         """
         pass
 

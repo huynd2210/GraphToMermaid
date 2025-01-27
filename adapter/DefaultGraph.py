@@ -6,8 +6,10 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
     def __init__(self):
         self.graph = nx.DiGraph()
 
-    def add_node(self, id, name=None, data=None):
-        self.graph.add_node(id, name=name, data=data)
+    def add_node(self, id, name=None, data=None, bracket_style=None):
+        if bracket_style is None:
+            bracket_style = ("[", "]")  # Default bracket style
+        self.graph.add_node(id, name=name, data=data, bracket_style=bracket_style)
 
     def remove_node(self, node_id):
         self.graph.remove_node(node_id)
@@ -17,13 +19,19 @@ class DefaultGraph(MermaidAdapter.GraphToMermaidAdapter, MermaidAdapter.MermaidT
 
     def remove_edge(self, id1, id2):
         self.graph.remove_edge(id1, id2)
+
     def get_edges(self):
         return list(self.graph.edges())
+
     def get_node_label_by_id(self, identifier):
         return self.graph.nodes[identifier]["name"]
 
+    def get_node_bracket_style(self, identifier) -> tuple[str, str]:
+        return self.graph.nodes[identifier].get("bracket_style", ("[", "]"))
+
     def get_node_neighbors_id_by_id(self, identifier):
         return self.graph.neighbors(identifier)
+
     def getAllNodesId(self):
         return list(self.graph.nodes())
 

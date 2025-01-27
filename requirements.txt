@@ -1,2 +1,2 @@
-mermaid-builder
-networkX
+networkx>=3.4.2
+pytest>=8.3.4
