@@ -1,8 +1,6 @@
-from mermaid_builder.flowchart import Chart, ChartDir, Node, Link
-
 from adapter.GraphToMermaidAdapter import GraphToMermaidAdapter
 from adapter.MermaidToGraphAdapter import MermaidToGraphAdapter
-from adapter.Parser import extractNodes, extractEdgesFromMermaid
+from adapter.Parser import extractNodes, extractEdgesFromMermaid, extractNodeBracketStyle
 
 
 def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> MermaidToGraphAdapter:
@@ -37,7 +35,8 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
 
     for node in nodes.items():
         nodeId, nodeLabel = node
-        graph.add_node(id=nodeId, name=nodeLabel)
+        bracket_style = extractNodeBracketStyle(mermaid_code, nodeId, delimiters)
+        graph.add_node(id=nodeId, name=nodeLabel, bracket_style=bracket_style)
 
     for edge in edges:
         origin, destination = edge
@@ -46,25 +45,24 @@ def mermaid_to_graph(mermaid_code: str, graph: MermaidToGraphAdapter) -> Mermaid
     return graph
 
 
-def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", title=""):
-    ChartDirection = {
-        "LR": ChartDir.LR,
-        "TD": ChartDir.TD,
-        "TB": ChartDir.TB,
-        "RL": ChartDir.RL,
-        "BT": ChartDir.BT,
-    }
-
-    mermaidChart = Chart(title=title, direction=ChartDirection[diagramType])
-
+def graph_to_mermaid(graph: GraphToMermaidAdapter, diagramType: str = "TD", title="") -> str:
+    """
+    Convert a graph to a mermaid flowchart string
+    """
+    result = [f"flowchart {diagramType}"]
+    
+    # Add node declarations
     for node in graph.getAllNodesId():
-        mermaidNodeLabel = graph.get_node_label_by_id(node)
-        mermaidChart.add_node(Node(title=mermaidNodeLabel, id=node))
-
+        node_label = graph.get_node_label_by_id(node)
+        left_bracket, right_bracket = graph.get_node_bracket_style(node)
+        result.append(f"  {node}{left_bracket}{node_label}{right_bracket}")
+    
+    # Add edges
+    for node in graph.getAllNodesId():
         for neighbor in graph.get_node_neighbors_id_by_id(node):
-            mermaidChart.add_link(Link(src=node, dest=neighbor))
-
-    return mermaidChart
+            result.append(f"  {node} --> {neighbor}")
+    
+    return "\n".join(result)
 
 
 if __name__ == '__main__':

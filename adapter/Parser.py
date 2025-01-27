@@ -1,4 +1,4 @@
-from typing import Set, List
+from typing import Set, List, Tuple, Optional
 
 from adapter.utils import get_string_between_delimiters
 
@@ -9,6 +9,24 @@ def extractNodeLabel(line, delimiters) -> List[str]:
         substring = get_string_between_delimiters(line, firstDelimiter, secondDelimiter)
         if substring is not None:
             return substring
+
+
+def extractNodeBracketStyle(mermaid_code: str, node_id: str, delimiters: Set[Tuple[str, str]]) -> Tuple[str, str]:
+    """
+    Extract the bracket style used for a specific node in the mermaid code.
+    Returns a tuple of (opening_bracket, closing_bracket).
+    """
+    lines = mermaid_code.strip().split('\n')
+    for line in lines:
+        line = line.strip()
+        if line.startswith(node_id):
+            for delimiter in delimiters:
+                opening, closing = delimiter
+                if opening in line and closing in line:
+                    return opening, closing
+    
+    # Default to square brackets if no specific style is found
+    return "[", "]"
 
 def extractNodes(mermaidCode:str, delimiters: Set[str], mermaid_links_types: Set[str]) -> dict:
     mermaid_code_as_list = mermaidCode.strip('\n').split("\n")[1:]

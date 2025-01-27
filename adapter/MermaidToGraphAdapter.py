@@ -7,12 +7,13 @@ from abc import ABC, abstractmethod
 class MermaidToGraphAdapter(ABC):
 
     @abstractmethod
-    def add_node(self, id, name=None, data=None):
+    def add_node(self, id, name=None, data=None, bracket_style=None):
         """
         Add a node to the graph
-        :param id:
-        :param name:
-        :param data:
+        :param id: Node identifier
+        :param name: Node name/label
+        :param data: Additional node data
+        :param bracket_style: Tuple of (opening_bracket, closing_bracket)
         :return:
         """
         pass
